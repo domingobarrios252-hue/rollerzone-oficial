@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noticia — RollerZone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ======================================================
+   RESET & VARIABLES
+   ====================================================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#F5A623;--gold-dark:#C8830A;--gold-light:#FFD080;
+  --black:#0D0D0D;--dark:#111214;--card:#1A1A1A;--card2:#222222;
+  --text:#F0EDE8;--muted:#888;--border:rgba(245,166,35,0.2);--border-solid:#2a2a2a;
+  --green:#3DD68C;--red:#F25C54;--blue:#4A9EFF;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;line-height:1.7;min-height:100vh;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;height:auto;}
+
+/* ======================================================
+   NAV
+   ====================================================== */
+nav{position:sticky;top:0;z-index:200;background:rgba(13,13,13,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;backdrop-filter:blur(8px);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--gold);}
+.logo span{color:var(--text);}
+.nav-links{display:flex;gap:1.5rem;list-style:none;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);}
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(13,13,13,0.98);border-bottom:1px solid var(--border);padding:1rem 2rem;z-index:199;flex-direction:column;gap:.75rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:.5rem 0;border-bottom:1px solid var(--border-solid);}
+.mobile-menu a:hover{color:var(--gold);}
+
+/* ======================================================
+   BREADCRUMB
+   ====================================================== */
+.breadcrumb{background:var(--dark);border-bottom:1px solid var(--border-solid);padding:.75rem 2rem;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.breadcrumb a{color:var(--muted);transition:color .2s;}
+.breadcrumb a:hover{color:var(--gold);}
+.breadcrumb .sep{margin:0 .5rem;opacity:.4;}
+
+/* ======================================================
+   ARTICLE HERO
+   ====================================================== */
+.article-hero{position:relative;min-height:420px;background:var(--dark);display:flex;align-items:flex-end;overflow:hidden;}
+.article-hero-bg{position:absolute;inset:0;}
+.article-hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.35;}
+.article-hero-gradient{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,13,.2) 0%,rgba(13,13,13,.98) 100%);}
+.article-hero-pattern{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(245,166,35,.025) 80px,rgba(245,166,35,.025) 81px),repeating-linear-gradient(0deg,transparent,transparent 80px,rgba(245,166,35,.025) 80px,rgba(245,166,35,.025) 81px);}
+.article-hero-content{position:relative;z-index:2;width:100%;max-width:860px;margin:0 auto;padding:3rem 2rem 2.5rem;}
+.article-category{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:4px 12px;margin-bottom:1.25rem;width:fit-content;}
+.article-category.cat-seleccion{background:var(--red);color:#fff;}
+.article-category.cat-tecnica{background:var(--green);color:#0d0d0d;}
+.article-category.cat-entrevista{background:var(--blue);color:#fff;}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:.95;letter-spacing:2px;color:var(--text);margin-bottom:1.25rem;}
+.article-meta{display:flex;align-items:center;flex-wrap:wrap;gap:1.5rem;font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);letter-spacing:.5px;}
+.article-meta .author{color:var(--gold);font-weight:600;}
+.article-meta .date{display:flex;align-items:center;gap:6px;}
+.article-meta .read-time{display:flex;align-items:center;gap:6px;}
+.meta-dot{width:3px;height:3px;background:var(--muted);border-radius:50%;}
+
+/* ======================================================
+   ARTICLE LAYOUT
+   ====================================================== */
+.article-layout{display:grid;grid-template-columns:1fr 320px;gap:3rem;max-width:1200px;margin:0 auto;padding:3rem 2rem;}
+
+/* ======================================================
+   ARTICLE BODY
+   ====================================================== */
+.article-body{min-width:0;}
+.article-lead{font-size:18px;line-height:1.7;color:rgba(240,237,232,.85);margin-bottom:2rem;font-weight:500;border-left:3px solid var(--gold);padding-left:1.25rem;}
+.article-text{font-size:16px;line-height:1.8;color:rgba(240,237,232,.8);}
+.article-text p{margin-bottom:1.5rem;}
+.article-text h2{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1.5px;color:var(--text);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.article-text h2 em{font-style:normal;color:var(--gold);}
+.article-text h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:.5px;color:var(--gold);margin:2rem 0 .75rem;text-transform:uppercase;}
+.article-text blockquote{margin:2rem 0;padding:1.5rem 1.75rem;background:rgba(245,166,35,.05);border-left:4px solid var(--gold);font-size:18px;font-style:italic;color:var(--text);line-height:1.65;}
+.article-text blockquote cite{display:block;margin-top:.75rem;font-family:'Barlow Condensed',sans-serif;font-style:normal;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
+.article-text ul,.article-text ol{margin:0 0 1.5rem 1.5rem;}
+.article-text li{margin-bottom:.5rem;}
+.article-img-full{width:100%;margin:2rem 0;display:block;}
+.article-img-full img{width:100%;max-height:460px;object-fit:cover;border:1px solid var(--border-solid);}
+.article-img-caption{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.5px;color:var(--muted);margin-top:.5rem;}
+
+/* ======================================================
+   ARTICLE TAGS & SHARE
+   ====================================================== */
+.article-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border-solid);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.article-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.article-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:var(--card);border:1px solid var(--border-solid);padding:4px 12px;transition:all .2s;cursor:default;}
+.article-tag:hover{color:var(--gold);border-color:rgba(245,166,35,.3);}
+.share-btns{display:flex;gap:.5rem;}
+.share-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--border-solid);color:var(--muted);background:transparent;cursor:pointer;transition:all .2s;}
+.share-btn:hover{color:var(--gold);border-color:rgba(245,166,35,.3);}
+
+/* ======================================================
+   RELATED NEWS
+   ====================================================== */
+.related-section{max-width:1200px;margin:0 auto;padding:0 2rem 3rem;}
+.related-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--text);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.related-title em{font-style:normal;color:var(--gold);}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.related-card{background:var(--card);padding:1.25rem 1.5rem;cursor:pointer;transition:background .2s;}
+.related-card:hover{background:var(--card2);}
+.related-card .news-category{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:2px 8px;display:inline-block;margin-bottom:.6rem;}
+.related-card .news-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;line-height:1.2;color:var(--text);margin-bottom:.5rem;}
+.related-card .news-meta{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted);}
+.related-card .news-meta span{color:rgba(245,166,35,.8);}
+
+/* ======================================================
+   SIDEBAR
+   ====================================================== */
+.article-sidebar{}
+.sidebar-widget{background:var(--dark);border:1px solid var(--border-solid);padding:1.5rem;margin-bottom:1.5rem;}
+.sidebar-widget-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-solid);}
+.sidebar-widget-title em{font-style:normal;color:var(--gold);}
+.sidebar-news-item{display:flex;gap:.75rem;padding:.6rem 0;border-bottom:1px solid rgba(42,42,42,.6);cursor:pointer;transition:opacity .2s;}
+.sidebar-news-item:last-child{border-bottom:none;}
+.sidebar-news-item:hover{opacity:.8;}
+.sidebar-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(245,166,35,.15);line-height:1;flex-shrink:0;min-width:28px;}
+.sidebar-news-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--text);line-height:1.25;margin-bottom:3px;}
+.sidebar-news-meta{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted);}
+.sidebar-news-meta span{color:rgba(245,166,35,.7);}
+/* Newsletter mini */
+.nl-mini-text{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.55;}
+.nl-mini-input{width:100%;background:#0d0d0d;border:1px solid var(--border-solid);color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:9px 12px;outline:none;margin-bottom:.5rem;transition:border-color .2s;}
+.nl-mini-input:focus{border-color:var(--gold);}
+.nl-mini-btn{width:100%;background:var(--gold);color:var(--black);border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px;cursor:pointer;transition:background .2s;}
+.nl-mini-btn:hover{background:var(--gold-dark);}
+/* Back button */
+.btn-back{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-solid);padding:9px 18px;background:transparent;cursor:pointer;transition:all .2s;margin-bottom:1.5rem;}
+.btn-back:hover{color:var(--gold);border-color:rgba(245,166,35,.3);}
+
+/* ======================================================
+   NOT FOUND STATE
+   ====================================================== */
+.not-found{max-width:600px;margin:6rem auto;text-align:center;padding:2rem;}
+.not-found-code{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(245,166,35,.15);letter-spacing:4px;line-height:1;}
+.not-found-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);margin-bottom:.75rem;}
+.not-found-text{font-size:14px;color:var(--muted);margin-bottom:2rem;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:12px 24px;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:var(--gold-dark);}
+
+/* ======================================================
+   FOOTER
+   ====================================================== */
+footer{background:var(--dark);border-top:1px solid var(--border);text-align:center;padding:2.5rem 2rem;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--gold);margin-bottom:.4rem;}
+.footer-tagline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem 1.5rem;margin-bottom:1.25rem;}
+.footer-links a{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(136,136,136,.5);}
+
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+@media(max-width:900px){
+  .article-layout{grid-template-columns:1fr;}
+  .article-sidebar{display:none;}
+  .related-grid{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+@media(max-width:600px){
+  .related-grid{grid-template-columns:1fr;}
+  .article-footer{flex-direction:column;align-items:flex-start;}
+  .article-hero-content{padding:2rem 1.25rem 2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a class="logo" href="index.html">ROLLER<span>ZONE</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#noticias">Noticias</a></li>
+    <li><a href="index.html#entrevistas">Entrevistas</a></li>
+    <li><a href="index.html#ranking">Ranking</a></li>
+    <li><a href="index.html#eventos">Eventos</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <a href="index.html#noticias">Noticias</a>
+  <a href="index.html#entrevistas">Entrevistas</a>
+  <a href="index.html#ranking">Ranking</a>
+  <a href="index.html#eventos">Eventos</a>
+</div>
+
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb" id="breadcrumb">
+  <a href="index.html">Inicio</a>
+  <span class="sep">›</span>
+  <a href="index.html#noticias">Noticias</a>
+  <span class="sep">›</span>
+  <span id="breadcrumb-title">Artículo</span>
+</div>
+
+<!-- ===== ARTICLE HERO ===== -->
+<div class="article-hero" id="article-hero">
+  <div class="article-hero-bg" id="article-hero-bg">
+    <!-- imagen de fondo si existe -->
+    <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);display:flex;align-items:center;justify-content:center;">
+      <svg viewBox="0 0 240 140" fill="none" style="width:200px;opacity:.08"><ellipse cx="120" cy="70" rx="96" ry="46" stroke="#F5A623" stroke-width="2"/><circle cx="120" cy="70" r="14" fill="#F5A623" opacity="0.4"/><line x1="24" y1="70" x2="216" y2="70" stroke="#F5A623" stroke-width="1" opacity="0.6"/></svg>
+    </div>
+  </div>
+  <div class="article-hero-gradient"></div>
+  <div class="article-hero-pattern"></div>
+  <div class="article-hero-content">
+    <div class="article-category" id="article-category">Cargando…</div>
+    <h1 class="article-title" id="article-title">Cargando noticia…</h1>
+    <div class="article-meta">
+      <span class="author" id="article-author">Redacción RollerZone</span>
+      <span class="meta-dot"></span>
+      <span class="date" id="article-date">—</span>
+      <span class="meta-dot"></span>
+      <span class="read-time" id="article-readtime">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ARTICLE LAYOUT ===== -->
+<div class="article-layout" id="article-layout">
+
+  <!-- BODY -->
+  <article class="article-body">
+    <p class="article-lead" id="article-lead"></p>
+    <div class="article-text" id="article-text"></div>
+
+    <div class="article-footer">
+      <div class="article-tags" id="article-tags-footer"></div>
+      <div class="share-btns">
+        <button class="share-btn" onclick="shareArticle('twitter')">X / Twitter</button>
+        <button class="share-btn" onclick="shareArticle('whatsapp')">WhatsApp</button>
+        <button class="share-btn" onclick="shareArticle('copy')">Copiar enlace</button>
+      </div>
+    </div>
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="article-sidebar">
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Más <em>Noticias</em></div>
+      <div id="sidebar-news"></div>
+    </div>
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Newsletter</div>
+      <p class="nl-mini-text">Resultados, noticias y técnica en tu correo cada semana.</p>
+      <input class="nl-mini-input" type="email" placeholder="tu@correo.com" id="nl-email">
+      <button class="nl-mini-btn" onclick="suscribirNl()">Suscribirme →</button>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ===== RELATED NEWS ===== -->
+<div class="related-section">
+  <h3 class="related-title">Noticias <em>Relacionadas</em></h3>
+  <div class="related-grid" id="related-grid"></div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">RollerZone</div>
+  <div class="footer-tagline">El medio del patinaje de velocidad en España</div>
+  <div class="footer-links">
+    <a href="index.html">Inicio</a>
+    <a href="index.html#noticias">Noticias</a>
+    <a href="index.html#entrevistas">Entrevistas</a>
+    <a href="index.html#ranking">Ranking</a>
+    <a href="index.html#eventos">Eventos</a>
+  </div>
+  <div class="footer-copy">© 2026 RollerZone · @rollerzone_spain · Todos los derechos reservados</div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+
+/* ======================================================
+   BASE DE DATOS DE NOTICIAS
+   Preparada para migración a Firebase en el futuro.
+   Estructura: Array de objetos con todos los campos necesarios.
+   ====================================================== */
+var NOTICIAS = [
+  {
+    id: 1,
+    titulo: 'Gijón: La Meca del Patinaje de Velocidad Español',
+    categoria: 'Reportaje',
+    fecha: '3 Abr 2026',
+    fechaISO: '2026-04-03',
+    autor: 'Redacción RollerZone',
+    tiempoLectura: '8 min',
+    img: '',
+    featured: true,
+    resumen: 'La pista Moreda cumple 30 años formando campeones. Hablamos con los protagonistas de una historia que define generaciones enteras de patinadores asturianos.',
+    lead: 'Cuando se habla de patinaje de velocidad en España, inevitablemente el camino lleva a Gijón. La pista de Moreda, con tres décadas a sus espaldas, ha forjado más campeones nacionales que cualquier otra instalación del país.',
+    contenido: `
+      <h2>Treinta Años de <em>Historia</em></h2>
+      <p>Era 1996 cuando la pista de Moreda abría sus puertas por primera vez. Pocos podían imaginar entonces que aquella instalación asturiana se convertiría en el epicentro del patinaje de velocidad nacional. Hoy, treinta años después, sus cifras hablan por sí solas: más de 40 campeones de España han entrenado aquí, y la lista de internacionales formados entre sus paredes sigue creciendo cada temporada.</p>
+      <p>El secreto, según quienes la conocen bien, no está solo en las instalaciones. Está en una cultura de entrenamiento que se ha transmitido de generación en generación, en entrenadores que llevan décadas perfeccionando su metodología y en una comunidad que vive y respira el deporte con una intensidad pocas veces vista.</p>
+
+      <blockquote>
+        "Moreda no es solo una pista. Es una escuela de vida. Los valores que aprendes aquí —sacrificio, respeto, superación— te acompañan mucho más allá del deporte."
+        <cite>— Chevi Guzmán, Campeón Nacional 2025</cite>
+      </blockquote>
+
+      <h2>Los Números <em>No Mienten</em></h2>
+      <p>El Club Gijón PC, que entrena regularmente en Moreda, acumula estadísticas que impresionan incluso a los más escépticos. En la última década han obtenido 23 medallas en Campeonatos de España, 8 participaciones en Campeonatos del Mundo y 4 récords nacionales. El 60% de la actual selección española sub-23 se ha formado en Asturias.</p>
+
+      <h3>Infraestructura de élite</h3>
+      <p>La reforma de 2019 dotó a Moreda de una pista homologada de 200 metros con superficie de madera de alta calidad, cronometraje láser, vestuarios ampliados y una zona de entrenamiento en seco que se ha convertido en referencia para los clubes nacionales. La inversión fue de 1,2 millones de euros, cofinanciados por el Ayuntamiento de Gijón, el Principado de Asturias y la Federación Española de Patinaje.</p>
+
+      <h2>La Nueva <em>Generación</em></h2>
+      <p>Si hay algo que define el patinaje asturiano actual es su profundidad generacional. Mientras veteranos como Chevi Guzmán siguen cosechando triunfos a nivel nacional, una oleada de jóvenes talentos emerge con fuerza. El benjamín del club, con solo 15 años, ya ha conseguido los mínimos para los Campeonatos de España junior.</p>
+      <p>El programa de tecnificación regional, implantado hace tres años bajo la dirección técnica de Carlos Redondo, ha sido clave. La detección temprana de talento, combinada con un plan de entrenamiento periodizado y un seguimiento individualizado, está dando sus frutos.</p>
+
+      <blockquote>
+        "Tenemos una cantera extraordinaria. Lo que más me enorgullece no es el presente, sino ver lo que se está gestando. En cinco años, el patinaje español va a vivir algo muy especial."
+        <cite>— Carlos Redondo, Seleccionador Nacional</cite>
+      </blockquote>
+
+      <h3>El factor humano</h3>
+      <p>Más allá de instalaciones y estadísticas, los que conocen Moreda desde dentro señalan siempre lo mismo: el ambiente. En los entrenamientos de tarde, cuando compiten niños de 8 años con veteranos de 35, se respira algo difícil de explicar. Una mezcla de exigencia y camaradería, de respeto por la tradición y hambre de futuro, que se contagia.</p>
+      <p>Los entrenadores no cobran fortunas. Muchos lo hacen por vocación, por devolver lo que el deporte les dio. Esa entrega desinteresada es quizás el activo más valioso que tiene Moreda, y el más difícil de replicar.</p>
+
+      <h2>Mirada al <em>Futuro</em></h2>
+      <p>El calendario 2026 trae nuevos retos. El Speed Track Gijón, previsto para abril, congregará a más de 180 patinadores nacionales e internacionales. Es la prueba más importante del año en territorio asturiano y un escaparate que el club aprovecha para proyectarse hacia el exterior.</p>
+      <p>A más largo plazo, hay planes para ampliar la pista a 250 metros, lo que permitiría homologar récords internacionales y atraer pruebas de la Copa de Europa. Una inversión ambiciosa que, si se materializa, podría convertir a Gijón definitivamente en destino obligado del patinaje de velocidad europeo.</p>
+      <p>Treinta años después de aquella inauguración silenciosa de 1996, Moreda no solo sigue en pie: está más viva que nunca. Y lo mejor, según todos los que la habitan, está todavía por llegar.</p>
+    `,
+    tags: ['Gijón', 'Moreda', 'Club Gijón PC', 'Historia', 'Asturias'],
+    relacionadas: [2, 3, 4]
+  },
+  {
+    id: 2,
+    titulo: 'Chevi Guzmán encabeza el ranking nacional tras la tercera jornada',
+    categoria: 'Resultados',
+    fecha: '2 Abr 2026',
+    fechaISO: '2026-04-02',
+    autor: 'Redacción RollerZone',
+    tiempoLectura: '4 min',
+    img: '',
+    featured: false,
+    resumen: 'El patinador asturiano se consolida en lo más alto de la clasificación con una actuación impecable en la tercera jornada de la Liga Nacional.',
+    lead: 'Chevi Guzmán selló su liderato en la Liga Nacional de Clubes con una exhibición de nivel en la tercera jornada, sumando los puntos necesarios para distanciarse de sus inmediatos perseguidores.',
+    contenido: `
+      <h2>Una Actuación <em>Impecable</em></h2>
+      <p>La tercera jornada de la Liga Nacional de Clubes 2026 dejó una imagen clara: Chevi Guzmán está en el mejor momento de su carrera. El patinador del Gijón PC completó todas las pruebas en las que participó con resultados sobresalientes, sumando los puntos que le sitúan con sólida ventaja en lo alto de la clasificación general.</p>
+      <p>Su mejor registro del día llegó en los 1.000 metros, donde marcó 1:22.45, nuevo récord personal y mejor tiempo de la temporada en la categoría sénior masculina. La pista de Valencia vibró ante una actuación que sus rivales reconocieron como "de otro nivel".</p>
+
+      <h3>Análisis de la jornada</h3>
+      <p>Más allá del resultado de Guzmán, la tercera jornada dejó otros titulares. El Llanes acortó distancias en la clasificación por equipos, y el sorprendente Leganés Inline sigue dando la campanada en la categoría sub-23. En femenino, la lucha sigue igualadísima entre tres clubes.</p>
+
+      <blockquote>
+        "Sabía que podía hacer ese tiempo. Llevaba semanas sintiéndome muy bien en los entrenamientos. Todo encajó hoy."
+        <cite>— Chevi Guzmán tras la prueba</cite>
+      </blockquote>
+
+      <h2>Clasificación General <em>Actualizada</em></h2>
+      <p>Con tres jornadas disputadas de ocho totales, la clasificación general sénior masculina muestra a Chevi Guzmán con 187 puntos, seguido de cerca por Daniel Milagros (174 pts) y Adrián Alonso (168 pts), los tres pertenecientes al Gijón PC. El primer patinador de otro club es Óscar Tapia del Valencia Inline, con 155 puntos.</p>
+      <p>La próxima jornada se disputará el 26 de abril en el velódromo de Valencia, en el marco de la Copa de España Inline. Se espera máxima participación y varios récords en juego.</p>
+    `,
+    tags: ['Liga Nacional', 'Resultados', 'Chevi Guzmán', 'Ranking', '2026'],
+    relacionadas: [1, 3, 5]
+  },
+  {
+    id: 3,
+    titulo: 'España cierra la temporada europea con tres medallas en Bogotá',
+    categoria: 'Selección',
+    fecha: '1 Abr 2026',
+    fechaISO: '2026-04-01',
+    autor: 'Redacción RollerZone',
+    tiempoLectura: '5 min',
+    img: '',
+    featured: false,
+    resumen: 'La selección española de patinaje de velocidad regresa del Mundial de Bogotá con tres medallas que confirman la progresión del equipo nacional.',
+    lead: 'Tres medallas —una de plata y dos de bronce— en el Campeonato del Mundo de Bogotá. La selección española volvió a casa con el pecho inflado y la certeza de que la nueva generación está preparada para competir con los mejores del planeta.',
+    contenido: `
+      <h2>España en el <em>Podio Mundial</em></h2>
+      <p>El pabellón Movistar Arena de Bogotá fue testigo de una actuación memorable del equipo español. En una competición dominada por Colombia y China, España supo hacer valer su trabajo y su técnica para subir al podio en tres ocasiones distintas a lo largo de cuatro días de competición.</p>
+      <p>La plata llegó en los relevos masculinos 5.000 metros, donde España completó una carrera táctica perfecta, aprovechando los errores del equipo italiano en la última vuelta. Las dos medallas de bronce correspondieron a Daniel Milagros en 500 metros individual y al relevo mixto.</p>
+
+      <h3>El análisis del seleccionador</h3>
+      <p>Carlos Redondo, seleccionador nacional, destacó la madurez del equipo ante los medios: "Hemos competido contra los mejores del mundo sin complejos. Cada año somos más regulares, más fiables. Este resultado es el fruto de años de trabajo sistemático."</p>
+
+      <blockquote>
+        "Tres medallas en un Mundial es un resultado histórico para la selección española. Pero lo que más me importa es cómo hemos competido, la actitud y el nivel técnico que hemos demostrado."
+        <cite>— Carlos Redondo, Seleccionador Nacional</cite>
+      </blockquote>
+
+      <h2>Mirada al <em>Futuro</em></h2>
+      <p>Con el calendario nacional en marcha y los Campeonatos de Europa en el horizonte, la selección española tiene motivos para el optimismo. La irrupción de varios sub-23 en el equipo absoluto abre un ciclo prometedor que, si el desarrollo es el esperado, podría brindar resultados históricos en los próximos años.</p>
+    `,
+    tags: ['Selección', 'Mundial', 'Bogotá', 'Medallas', 'Internacional'],
+    relacionadas: [1, 2, 4]
+  },
+  {
+    id: 4,
+    titulo: 'Los secretos del viraje perfecto: análisis biomecánico del sprint',
+    categoria: 'Técnica',
+    fecha: '31 Mar 2026',
+    fechaISO: '2026-03-31',
+    autor: 'Carlos Redondo — Seleccionador Nacional',
+    tiempoLectura: '6 min',
+    img: '',
+    featured: false,
+    resumen: 'El entrenador nacional analiza frame a frame los elementos clave del viraje élite: ángulos, fuerzas y los ajustes que marcan la diferencia entre ganar y perder.',
+    lead: 'En el patinaje de velocidad, los partidos no se ganan en las rectas. Se ganan en las curvas. Un análisis detallado de la biomecánica del viraje revela por qué los mejores patinadores del mundo son capaces de mantener y hasta ganar velocidad donde otros la pierden.',
+    contenido: `
+      <h2>Física del <em>Viraje</em></h2>
+      <p>Cuando un patinador entra en curva, se enfrenta a un reto físico extraordinario. Las fuerzas centrífugas que actúan sobre el cuerpo pueden superar cuatro veces el peso corporal en las curvas más cerradas. La capacidad de gestionar esas fuerzas sin perder velocidad es lo que separa a los élite del resto.</p>
+      <p>El análisis de vídeo de alta velocidad (480 fps) de los mejores patinadores mundiales revela tres elementos críticos que se producen de forma casi simultánea en el viraje óptimo: inclinación del tronco, posición del centro de masa y timing del sobrecruce.</p>
+
+      <h3>El ángulo de inclinación</h3>
+      <p>Los mejores patinadores de corta distancia inclinan el tronco entre 28 y 34 grados hacia el interior de la curva. Este ángulo varía según la velocidad de entrada y el radio de la curva. Un ángulo insuficiente obliga al patinador a compensar con mayor fuerza muscular, lo que genera fatiga prematura y pérdida de velocidad.</p>
+
+      <blockquote>
+        "Un grado más o menos de inclinación puede suponer entre 0,1 y 0,3 décimas en una prueba corta. A nivel élite, eso es la diferencia entre el podio y el quinto puesto."
+        <cite>— Carlos Redondo</cite>
+      </blockquote>
+
+      <h3>El sobrecruce: la clave invisible</h3>
+      <p>El sobrecruce de la pierna exterior sobre la interior es el gesto técnico más visible del viraje, pero también el más malinterpretado. Muchos patinadores lo ejecutan demasiado tarde o con una trayectoria subóptima. El sobrecruce ideal debe completarse cuando el centro de masa está directamente sobre el punto de apoyo, generando así la máxima transferencia de energía al siguiente impulso.</p>
+
+      <h2>Ejercicios para <em>Mejorar</em></h2>
+      <p>Basándose en este análisis, el plan de entrenamiento técnico de la selección incorpora tres ejercicios específicos: el slalom de conos en velocidad progresiva, el "eagle" controlado en curva cerrada, y el trabajo de sobrecruce con banda elástica. Todos ellos se trabajan primero a baja velocidad con énfasis en la posición, antes de integrarlos en contexto de competición.</p>
+    `,
+    tags: ['Técnica', 'Biomecánica', 'Viraje', 'Sprint', 'Entrenamiento'],
+    relacionadas: [1, 5, 2]
+  },
+  {
+    id: 5,
+    titulo: 'Bont Vaypor S3: probamos el patín que está dominando la temporada 2026',
+    categoria: 'Equipación',
+    fecha: '29 Mar 2026',
+    fechaISO: '2026-03-29',
+    autor: 'Redacción RollerZone',
+    tiempoLectura: '7 min',
+    img: '',
+    featured: false,
+    resumen: 'Análisis completo del modelo más vendido del año. Rigidez, peso, ajuste y rendimiento en pista real con 6 patinadores de distintos niveles.',
+    lead: 'El Bont Vaypor S3 llegó a principios de temporada con unas promesas ambiciosas. Seis semanas después de tenerlos en pista, podemos confirmar que no son solo marketing: este patín es un salto generacional real.',
+    contenido: `
+      <h2>Primeras <em>Impresiones</em></h2>
+      <p>La bota del Vaypor S3 es visualmente llamativa. La construcción de fibra de carbono de alta tenacidad es notablemente más delgada que en el modelo anterior, sin sacrificar rigidez. El sistema de cierre combina boa rotativo con velcro de alta retención, una combinación que ya habíamos visto en la competencia pero que Bont ha perfeccionado en términos de ajuste plantar.</p>
+      <p>El peso es impresionante: 275 gramos por bota en talla 42, aproximadamente un 8% menos que el S2. Puede parecer marginal, pero en sprints repetidos durante una jornada de competición, la diferencia se acumula.</p>
+
+      <h3>Rigidez y transmisión de potencia</h3>
+      <p>Bont asigna al Vaypor S3 un índice de rigidez de 92/100. En la práctica, esto se traduce en una transmisión de potencia casi directa que penaliza a los patinadores con técnica deficiente pero premia extraordinariamente a los que tienen un empuje limpio y eficiente. Varios patinadores de nivel medio del grupo de prueba reportaron ligero malestar en el arco del pie durante las primeras sesiones, señal de que la bota exige una musculatura plantar desarrollada.</p>
+
+      <blockquote>
+        "Es el patín más rápido que he probado en recta. En curva tienes que comprometerte más con la inclinación, pero cuando lo dominas, la diferencia es clara."
+        <cite>— Adrián Alonso, Gijón PC</cite>
+      </blockquote>
+
+      <h2>Veredicto <em>Final</em></h2>
+      <p>El Bont Vaypor S3 es, sin duda, uno de los mejores patines de competición del mercado actual. Su precio (429€ bota sola) lo sitúa en el segmento premium, pero la inversión está justificada para patinadores que compiten a nivel regional o nacional. Para principiantes o nivel recreacional, existen opciones del mismo fabricante con mejor relación prestaciones/precio.</p>
+      <p>Puntuación RollerZone: 9.1/10.</p>
+    `,
+    tags: ['Equipación', 'Bont', 'Vaypor S3', 'Review', 'Patines'],
+    relacionadas: [4, 1, 3]
+  }
+];
+
+/* ======================================================
+   FUNCIÓN PRINCIPAL: leer ID de URL y renderizar
+   Preparado para Firebase: solo hay que reemplazar
+   la búsqueda en array por una query a Firestore.
+   ====================================================== */
+function init() {
+  var params = new URLSearchParams(window.location.search);
+  var id = parseInt(params.get('id'));
+
+  // Buscar noticia por ID
+  var noticia = NOTICIAS.find(function(n) { return n.id === id; });
+
+  if (!noticia) {
+    renderNotFound();
+    return;
+  }
+
+  renderNoticia(noticia);
+  renderSidebar(noticia);
+  renderRelacionadas(noticia);
+}
+
+/* ======================================================
+   RENDERIZAR NOTICIA
+   ====================================================== */
+function renderNoticia(n) {
+  // Título de la pestaña
+  document.title = n.titulo + ' — RollerZone';
+
+  // Breadcrumb
+  document.getElementById('breadcrumb-title').textContent = n.titulo.substring(0, 50) + (n.titulo.length > 50 ? '…' : '');
+
+  // Hero: imagen de fondo
+  if (n.img) {
+    document.getElementById('article-hero-bg').innerHTML = '<img src="' + n.img + '" alt="' + n.titulo + '">';
+  }
+
+  // Categoría
+  var catEl = document.getElementById('article-category');
+  catEl.textContent = n.categoria;
+  var catClasses = { 'Selección': 'cat-seleccion', 'Técnica': 'cat-tecnica', 'Entrevista': 'cat-entrevista' };
+  if (catClasses[n.categoria]) catEl.classList.add(catClasses[n.categoria]);
+
+  // Datos del hero
+  document.getElementById('article-title').textContent = n.titulo;
+  document.getElementById('article-author').textContent = n.autor;
+  document.getElementById('article-date').textContent = n.fecha;
+  document.getElementById('article-readtime').textContent = n.tiempoLectura + ' lectura';
+
+  // Cuerpo del artículo
+  document.getElementById('article-lead').textContent = n.lead;
+  document.getElementById('article-text').innerHTML = n.contenido;
+
+  // Tags en el footer del artículo
+  var tagsHTML = n.tags.map(function(t) {
+    return '<span class="article-tag">' + t + '</span>';
+  }).join('');
+  document.getElementById('article-tags-footer').innerHTML = tagsHTML;
+}
+
+/* ======================================================
+   RENDERIZAR SIDEBAR (noticias recientes)
+   ====================================================== */
+function renderSidebar(noticiaActual) {
+  var otras = NOTICIAS.filter(function(n) { return n.id !== noticiaActual.id; }).slice(0, 4);
+  var html = '';
+  otras.forEach(function(n, i) {
+    html += '<div class="sidebar-news-item" onclick="window.location.href=\'noticia.html?id=' + n.id + '\'">';
+    html += '<div class="sidebar-num">0' + (i + 1) + '</div>';
+    html += '<div>';
+    html += '<div class="sidebar-news-title">' + n.titulo + '</div>';
+    html += '<div class="sidebar-news-meta"><span>' + n.fecha + '</span> · ' + n.tiempoLectura + '</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  document.getElementById('sidebar-news').innerHTML = html;
+}
+
+/* ======================================================
+   RENDERIZAR NOTICIAS RELACIONADAS
+   ====================================================== */
+function renderRelacionadas(noticiaActual) {
+  var ids = noticiaActual.relacionadas || [];
+  var relacionadas = NOTICIAS.filter(function(n) { return ids.indexOf(n.id) > -1; }).slice(0, 3);
+
+  // Fallback: si no hay relacionadas, mostrar las más recientes
+  if (relacionadas.length < 3) {
+    var extras = NOTICIAS.filter(function(n) { return n.id !== noticiaActual.id && ids.indexOf(n.id) === -1; });
+    relacionadas = relacionadas.concat(extras).slice(0, 3);
+  }
+
+  var html = '';
+  var catClasses = { 'Selección': 'cat-seleccion', 'Técnica': 'cat-tecnica', 'Entrevista': 'cat-entrevista' };
+  relacionadas.forEach(function(n) {
+    var cc = catClasses[n.categoria] || '';
+    html += '<div class="related-card" onclick="window.location.href=\'noticia.html?id=' + n.id + '\'">';
+    html += '<div class="news-category ' + cc + '">' + n.categoria + '</div>';
+    html += '<div class="news-title">' + n.titulo + '</div>';
+    html += '<div class="news-meta"><span>' + n.fecha + '</span> · ' + n.tiempoLectura + '</div>';
+    html += '</div>';
+  });
+  document.getElementById('related-grid').innerHTML = html;
+}
+
+/* ======================================================
+   ESTADO: NOTICIA NO ENCONTRADA
+   ====================================================== */
+function renderNotFound() {
+  document.getElementById('article-hero').style.display = 'none';
+  document.getElementById('article-layout').innerHTML = '<div class="not-found"><div class="not-found-code">404</div><div class="not-found-title">Noticia no encontrada</div><p class="not-found-text">La noticia que buscas no existe o ha sido eliminada.</p><a class="btn-primary" href="index.html">← Volver al inicio</a></div>';
+  document.getElementById('related-grid').closest('.related-section').style.display = 'none';
+}
+
+/* ======================================================
+   COMPARTIR ARTÍCULO
+   ====================================================== */
+function shareArticle(platform) {
+  var url = window.location.href;
+  var title = document.getElementById('article-title').textContent;
+  if (platform === 'twitter') {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank');
+  } else if (platform === 'whatsapp') {
+    window.open('https://wa.me/?text=' + encodeURIComponent(title + ' ' + url), '_blank');
+  } else if (platform === 'copy') {
+    navigator.clipboard.writeText(url).then(function() {
+      alert('Enlace copiado al portapapeles.');
+    });
+  }
+}
+
+/* ======================================================
+   NEWSLETTER MINI
+   ====================================================== */
+function suscribirNl() {
+  var email = document.getElementById('nl-email').value.trim();
+  if (!email || !email.includes('@')) { alert('Introduce un correo válido.'); return; }
+  var btn = document.querySelector('.nl-mini-btn');
+  btn.textContent = '✓ Suscrito';
+  btn.style.background = '#3DD68C';
+  document.getElementById('nl-email').value = '';
+  setTimeout(function() { btn.textContent = 'Suscribirme →'; btn.style.background = ''; }, 3000);
+}
+
+/* ======================================================
+   NAVEGACIÓN MÓVIL
+   ====================================================== */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ======================================================
+   INICIALIZACIÓN
+   ====================================================== */
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>

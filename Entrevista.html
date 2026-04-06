@@ -1,0 +1,616 @@
+Entrevista · HTML
+Copiar
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrevista — RollerZone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ======================================================
+   RESET & VARIABLES
+   ====================================================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#F5A623;--gold-dark:#C8830A;--gold-light:#FFD080;
+  --black:#0D0D0D;--dark:#111214;--card:#1A1A1A;--card2:#222222;
+  --text:#F0EDE8;--muted:#888;--border:rgba(245,166,35,0.2);--border-solid:#2a2a2a;
+  --green:#3DD68C;--red:#F25C54;--blue:#4A9EFF;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;font-size:16px;line-height:1.7;min-height:100vh;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;height:auto;}
+ 
+/* ======================================================
+   NAV
+   ====================================================== */
+nav{position:sticky;top:0;z-index:200;background:rgba(13,13,13,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;backdrop-filter:blur(8px);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--gold);}
+.logo span{color:var(--text);}
+.nav-links{display:flex;gap:1.5rem;list-style:none;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);}
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(13,13,13,0.98);border-bottom:1px solid var(--border);padding:1rem 2rem;z-index:199;flex-direction:column;gap:.75rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:.5rem 0;border-bottom:1px solid var(--border-solid);}
+.mobile-menu a:hover{color:var(--gold);}
+ 
+/* ======================================================
+   BREADCRUMB
+   ====================================================== */
+.breadcrumb{background:var(--dark);border-bottom:1px solid var(--border-solid);padding:.75rem 2rem;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.breadcrumb a{color:var(--muted);transition:color .2s;}
+.breadcrumb a:hover{color:var(--gold);}
+.breadcrumb .sep{margin:0 .5rem;opacity:.4;}
+ 
+/* ======================================================
+   ENTREVISTA HERO — estilo exclusiva, guillotine layout
+   ====================================================== */
+.entrevista-hero{background:var(--dark);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.entrevista-hero-inner{max-width:1200px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:center;}
+/* Decoración de fondo */
+.entrevista-hero::before{content:'';position:absolute;right:-80px;top:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.06) 0%,transparent 70%);pointer-events:none;}
+.entrevista-hero::after{content:'"';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(200px,20vw,320px);color:rgba(245,166,35,.04);line-height:1;pointer-events:none;user-select:none;}
+.entrevista-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:4px 14px;display:inline-block;margin-bottom:1.5rem;}
+.entrevista-hero-nombre{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,80px);line-height:.9;letter-spacing:2px;color:var(--text);margin-bottom:.5rem;}
+.entrevista-hero-rol{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;letter-spacing:.5px;color:var(--gold);margin-bottom:1.5rem;}
+.entrevista-hero-quote{font-size:18px;font-style:italic;color:rgba(240,237,232,.75);line-height:1.65;margin-bottom:1.5rem;max-width:560px;}
+.entrevista-hero-meta{display:flex;align-items:center;flex-wrap:wrap;gap:1rem;}
+.entrevista-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(245,166,35,.25);padding:4px 12px;background:rgba(245,166,35,.05);}
+/* Avatar lado derecho */
+.entrevista-avatar-wrap{position:relative;z-index:2;display:flex;justify-content:center;}
+.entrevista-avatar-frame{position:relative;width:280px;height:320px;}
+.entrevista-avatar-frame::before{content:'';position:absolute;inset:-8px;border:1px solid rgba(245,166,35,.2);}
+.entrevista-avatar-frame::after{content:'';position:absolute;top:12px;left:12px;right:-12px;bottom:-12px;border:1px solid rgba(245,166,35,.08);}
+.entrevista-avatar-img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1;}
+.entrevista-avatar-placeholder{width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.entrevista-avatar-initials{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(245,166,35,.2);letter-spacing:4px;}
+.entrevista-avatar-badge{position:absolute;bottom:-1rem;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 16px;white-space:nowrap;z-index:2;}
+ 
+/* ======================================================
+   ENTREVISTA LAYOUT
+   ====================================================== */
+.entrevista-layout{display:grid;grid-template-columns:1fr 300px;gap:3rem;max-width:1200px;margin:0 auto;padding:3rem 2rem;}
+ 
+/* ======================================================
+   QA (preguntas y respuestas)
+   ====================================================== */
+.entrevista-intro{font-size:17px;color:rgba(240,237,232,.8);line-height:1.75;margin-bottom:2.5rem;border-left:3px solid var(--gold);padding-left:1.25rem;}
+.qa-block{margin-bottom:2.5rem;}
+.qa-pregunta{display:flex;gap:1rem;align-items:flex-start;margin-bottom:.75rem;}
+.qa-p-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--gold);flex-shrink:0;line-height:1.3;margin-top:.05em;}
+.qa-p-text{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--text);line-height:1.3;letter-spacing:.2px;}
+.qa-respuesta{display:flex;gap:1rem;align-items:flex-start;}
+.qa-r-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--muted);flex-shrink:0;line-height:1.3;margin-top:.05em;}
+.qa-r-text{font-size:16px;color:rgba(240,237,232,.78);line-height:1.75;}
+/* Cita destacada dentro del cuerpo */
+.entrevista-destacado{margin:2.5rem 0;padding:2rem 2rem 2rem 2.5rem;background:rgba(245,166,35,.04);border-left:4px solid var(--gold);position:relative;}
+.entrevista-destacado::before{content:'"';position:absolute;top:-.5rem;left:1.25rem;font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(245,166,35,.12);line-height:1;}
+.entrevista-destacado-text{font-size:20px;font-style:italic;color:var(--text);line-height:1.55;position:relative;}
+/* Sección especial dentro de entrevista */
+.entrevista-section-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);margin:3rem 0 1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.entrevista-section-title em{font-style:normal;color:var(--gold);}
+ 
+/* ======================================================
+   FOOTER DE ENTREVISTA: TAGS + SHARE
+   ====================================================== */
+.entrevista-footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border-solid);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.article-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.article-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:var(--card);border:1px solid var(--border-solid);padding:4px 12px;transition:all .2s;cursor:default;}
+.article-tag:hover{color:var(--gold);border-color:rgba(245,166,35,.3);}
+.share-btns{display:flex;gap:.5rem;}
+.share-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--border-solid);color:var(--muted);background:transparent;cursor:pointer;transition:all .2s;}
+.share-btn:hover{color:var(--gold);border-color:rgba(245,166,35,.3);}
+ 
+/* ======================================================
+   SIDEBAR
+   ====================================================== */
+.entrevista-sidebar{}
+.sidebar-widget{background:var(--dark);border:1px solid var(--border-solid);padding:1.5rem;margin-bottom:1.5rem;}
+.sidebar-widget-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--text);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-solid);}
+.sidebar-widget-title em{font-style:normal;color:var(--gold);}
+/* Card mini entrevistado */
+.sidebar-entrevista-item{display:flex;gap:.85rem;align-items:center;padding:.75rem 0;border-bottom:1px solid rgba(42,42,42,.6);cursor:pointer;transition:opacity .2s;}
+.sidebar-entrevista-item:last-child{border-bottom:none;}
+.sidebar-entrevista-item:hover{opacity:.8;}
+.sidebar-ent-avatar{width:44px;height:44px;border-radius:50%;background:var(--card2);border:1px solid var(--border-solid);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);flex-shrink:0;overflow:hidden;}
+.sidebar-ent-avatar img{width:100%;height:100%;object-fit:cover;}
+.sidebar-ent-nombre{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:2px;}
+.sidebar-ent-rol{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted);}
+/* Newsletter mini */
+.nl-mini-text{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.55;}
+.nl-mini-input{width:100%;background:#0d0d0d;border:1px solid var(--border-solid);color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:9px 12px;outline:none;margin-bottom:.5rem;transition:border-color .2s;}
+.nl-mini-input:focus{border-color:var(--gold);}
+.nl-mini-btn{width:100%;background:var(--gold);color:var(--black);border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px;cursor:pointer;transition:background .2s;}
+.nl-mini-btn:hover{background:var(--gold-dark);}
+ 
+/* ======================================================
+   MÁS ENTREVISTAS (sección inferior)
+   ====================================================== */
+.mas-section{max-width:1200px;margin:0 auto;padding:0 2rem 3rem;}
+.mas-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--text);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.mas-title em{font-style:normal;color:var(--gold);}
+.mas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.mas-card{background:var(--card);padding:1.5rem;cursor:pointer;transition:background .2s;position:relative;overflow:hidden;}
+.mas-card:hover{background:var(--card2);}
+.mas-card::after{content:'"';position:absolute;top:-10px;right:10px;font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(245,166,35,.05);pointer-events:none;line-height:1;}
+.mas-card-top{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;}
+.mas-avatar{width:48px;height:48px;border-radius:50%;background:var(--card2);border:2px solid var(--border-solid);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);flex-shrink:0;overflow:hidden;}
+.mas-avatar img{width:100%;height:100%;object-fit:cover;}
+.mas-nombre{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gold);line-height:1;}
+.mas-rol{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted);margin-top:2px;}
+.mas-quote{font-size:13px;color:rgba(240,237,232,.6);line-height:1.55;font-style:italic;margin-bottom:.85rem;}
+.mas-link{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+ 
+/* ======================================================
+   NOT FOUND
+   ====================================================== */
+.not-found{max-width:600px;margin:6rem auto;text-align:center;padding:2rem;}
+.not-found-code{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(245,166,35,.15);letter-spacing:4px;line-height:1;}
+.not-found-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);margin-bottom:.75rem;}
+.not-found-text{font-size:14px;color:var(--muted);margin-bottom:2rem;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:12px 24px;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:var(--gold-dark);}
+ 
+/* ======================================================
+   FOOTER
+   ====================================================== */
+footer{background:var(--dark);border-top:1px solid var(--border);text-align:center;padding:2.5rem 2rem;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--gold);margin-bottom:.4rem;}
+.footer-tagline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem 1.5rem;margin-bottom:1.25rem;}
+.footer-links a{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:rgba(136,136,136,.5);}
+ 
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+@media(max-width:900px){
+  .entrevista-hero-inner{grid-template-columns:1fr;}
+  .entrevista-avatar-wrap{display:none;}
+  .entrevista-layout{grid-template-columns:1fr;}
+  .entrevista-sidebar{display:none;}
+  .mas-grid{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+}
+@media(max-width:600px){
+  .mas-grid{grid-template-columns:1fr;}
+  .entrevista-footer{flex-direction:column;align-items:flex-start;}
+  .entrevista-hero-inner{padding:2rem 1.25rem;}
+}
+</style>
+</head>
+<body>
+ 
+<!-- ===== NAV ===== -->
+<nav>
+  <a class="logo" href="index.html">ROLLER<span>ZONE</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#noticias">Noticias</a></li>
+    <li><a href="index.html#entrevistas">Entrevistas</a></li>
+    <li><a href="index.html#ranking">Ranking</a></li>
+    <li><a href="index.html#eventos">Eventos</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Inicio</a>
+  <a href="index.html#noticias">Noticias</a>
+  <a href="index.html#entrevistas">Entrevistas</a>
+  <a href="index.html#ranking">Ranking</a>
+  <a href="index.html#eventos">Eventos</a>
+</div>
+ 
+<!-- ===== BREADCRUMB ===== -->
+<div class="breadcrumb">
+  <a href="index.html">Inicio</a>
+  <span class="sep">›</span>
+  <a href="index.html#entrevistas">Entrevistas</a>
+  <span class="sep">›</span>
+  <span id="breadcrumb-nombre">Entrevista</span>
+</div>
+ 
+<!-- ===== ENTREVISTA HERO ===== -->
+<div class="entrevista-hero" id="entrevista-hero">
+  <div class="entrevista-hero-inner">
+    <div>
+      <div class="entrevista-label">Entrevista Exclusiva</div>
+      <div class="entrevista-hero-nombre" id="ent-nombre">Cargando…</div>
+      <div class="entrevista-hero-rol" id="ent-rol">—</div>
+      <p class="entrevista-hero-quote" id="ent-quote"></p>
+      <div class="entrevista-hero-meta" id="ent-tags"></div>
+    </div>
+    <div class="entrevista-avatar-wrap">
+      <div class="entrevista-avatar-frame">
+        <div id="ent-avatar-content" class="entrevista-avatar-placeholder">
+          <span class="entrevista-avatar-initials" id="ent-initials">—</span>
+        </div>
+        <div class="entrevista-avatar-badge" id="ent-badge">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ===== ENTREVISTA LAYOUT ===== -->
+<div class="entrevista-layout" id="entrevista-layout">
+ 
+  <!-- CUERPO -->
+  <article class="entrevista-cuerpo">
+    <p class="entrevista-intro" id="ent-intro"></p>
+    <div id="ent-qa"></div>
+ 
+    <div class="entrevista-footer">
+      <div class="article-tags" id="ent-tags-footer"></div>
+      <div class="share-btns">
+        <button class="share-btn" onclick="shareArticle('twitter')">X / Twitter</button>
+        <button class="share-btn" onclick="shareArticle('whatsapp')">WhatsApp</button>
+        <button class="share-btn" onclick="shareArticle('copy')">Copiar enlace</button>
+      </div>
+    </div>
+  </article>
+ 
+  <!-- SIDEBAR -->
+  <aside class="entrevista-sidebar">
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Más <em>Entrevistas</em></div>
+      <div id="sidebar-entrevistas"></div>
+    </div>
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Newsletter</div>
+      <p class="nl-mini-text">Entrevistas exclusivas, resultados y técnica en tu correo.</p>
+      <input class="nl-mini-input" type="email" placeholder="tu@correo.com" id="nl-email">
+      <button class="nl-mini-btn" onclick="suscribirNl()">Suscribirme →</button>
+    </div>
+  </aside>
+ 
+</div>
+ 
+<!-- ===== MÁS ENTREVISTAS ===== -->
+<div class="mas-section">
+  <h3 class="mas-title">Más <em>Entrevistas</em></h3>
+  <div class="mas-grid" id="mas-grid"></div>
+</div>
+ 
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">RollerZone</div>
+  <div class="footer-tagline">El medio del patinaje de velocidad en España</div>
+  <div class="footer-links">
+    <a href="index.html">Inicio</a>
+    <a href="index.html#noticias">Noticias</a>
+    <a href="index.html#entrevistas">Entrevistas</a>
+    <a href="index.html#ranking">Ranking</a>
+    <a href="index.html#eventos">Eventos</a>
+  </div>
+  <div class="footer-copy">© 2026 RollerZone · @rollerzone_spain · Todos los derechos reservados</div>
+</footer>
+ 
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+ 
+/* ======================================================
+   BASE DE DATOS DE ENTREVISTAS
+   Preparada para migración a Firebase en el futuro.
+   Cada entrada incluye array de QA (preguntas/respuestas).
+   ====================================================== */
+var ENTREVISTAS = [
+  {
+    id: 1,
+    nombre: 'Chevi Guzmán',
+    rol: 'Patinador élite — Club Gijón PC',
+    cargo: 'Campeón Nacional 2025',
+    img: '',
+    quote: 'El patinaje de velocidad te enseña que los límites solo existen si tú los pones. Cada día en pista es una oportunidad de romperlos.',
+    tags: ['Técnica', 'Motivación', 'Élite', 'Gijón PC'],
+    intro: 'Chevi Guzmán es el nombre más reconocible del patinaje de velocidad español en este momento. Campeón nacional en 2025, actual líder del ranking de la Liga Nacional y referente para una generación entera de patinadores, nos recibió en las instalaciones de Moreda para hablar sin filtros sobre su carrera, su mentalidad y el futuro del deporte en España.',
+    qa: [
+      {
+        pregunta: '¿Qué tiene Moreda que no tienen otras pistas de España?',
+        respuesta: 'Todo. La historia, la gente, el ambiente que se respira. Cuando entras a entrenar en Moreda y ves fotos de todos los campeones que han pasado por aquí, sientes algo difícil de describir. Hay una presión positiva, una exigencia colectiva. Nadie quiere fallar delante de esa pared de fotos. Eso te eleva.'
+      },
+      {
+        pregunta: '¿Cómo fue el proceso de convertirte en campeón nacional? ¿Hubo un momento clave?',
+        respuesta: 'Hubo varios, pero si tengo que elegir uno, diría que fue el año que decidí cambiar mi relación con el fracaso. Antes me hundía cuando perdía. Empecé a verlo como información, como datos que necesitaba para mejorar. Desde que hice ese cambio mental, todo fluyó de otra manera. El título llegó después, casi como consecuencia natural.'
+      },
+      {
+        pregunta: 'Eres conocido por tu trabajo técnico, especialmente en el viraje. ¿Cuánto tiempo dedicas a la técnica pura?',
+        respuesta: 'Más del que la gente cree. En temporada, al menos un tercio de cada entrenamiento es técnica pura, sin cronómetro, sin presión de tiempo. La velocidad es la consecuencia de la técnica perfecta, no al revés. Si tu viraje falla, puedes tener las piernas que quieras y perderás. Llevo años obsesionado con el sobrecruce, con el ángulo de inclinación, con el timing. Es trabajo invisible, pero es el que marca la diferencia.'
+      },
+      {
+        pregunta: '¿Qué mensaje le darías a un patinador joven que quiere llegar alto?',
+        respuesta: 'Que confíe en el proceso y que sea paciente con sus progresos, pero impaciente con su actitud diaria. No puedes controlar cuándo llegas al top, pero sí puedes controlar con qué nivel de exigencia te presentas cada día a entrenar. Y que disfrute el camino. Yo he tardado diez años en llegar a donde estoy, y no cambiaría ni un entrenamiento de esos diez años.'
+      },
+      {
+        pregunta: '¿Cómo ves el futuro del patinaje de velocidad en España?',
+        respuesta: 'Con mucho optimismo. La cantera que hay ahora mismo en Asturias, en Valencia, en Cataluña... hay chicos de 16, 17 años con una calidad que yo no tenía a esa edad. El seleccionador está haciendo un trabajo enorme de base. En cinco años, creo que España puede pelear medallas mundiales de manera regular. No de casualidad, sino de manera sistemática. Eso es lo que queremos construir.'
+      }
+    ],
+    destacado: 'La velocidad es la consecuencia de la técnica perfecta, no al revés. Si tu viraje falla, puedes tener las piernas que quieras y perderás.',
+    fecha: '28 Mar 2026',
+    tiempoLectura: '10 min'
+  },
+  {
+    id: 2,
+    nombre: 'Carlos Redondo',
+    rol: 'Seleccionador Nacional de España',
+    cargo: 'Seleccionador Nacional',
+    img: '',
+    quote: 'La nueva generación tiene hambre de medallas. Hemos cambiado la metodología de entrenamiento y los resultados empiezan a llegar.',
+    tags: ['Selección', 'Entrenamiento', 'Táctica', 'Nacional'],
+    intro: 'Carlos Redondo lleva tres años al frente de la selección española de patinaje de velocidad. En ese tiempo ha impulsado una renovación metodológica profunda cuyos frutos comenzaron a verse en el último Mundial. Hablamos con él sobre su visión del deporte, el modelo de alto rendimiento y los objetivos para los próximos ciclos.',
+    qa: [
+      {
+        pregunta: '¿Qué encontraste cuando tomaste las riendas de la selección en 2023?',
+        respuesta: 'Encontré un grupo de patinadores con mucho talento pero sin una metodología unificada. Cada entrenador de club hacía las cosas a su manera, y en la selección no había un modelo de juego definido. Lo primero que hice fue establecer un modelo técnico común, una serie de principios que todos los convocados deben conocer y aplicar. Cuando todo el mundo habla el mismo idioma técnico, el rendimiento colectivo sube.'
+      },
+      {
+        pregunta: '¿Qué cambios concretos has introducido en la metodología?',
+        respuesta: 'Tres grandes áreas. Primero, la periodización: pasamos de preparaciones empíricas a planes anuales basados en datos, con fases de carga y recuperación bien definidas. Segundo, el análisis de vídeo: ahora cada patinador de la selección recibe un análisis biomecánico mensual. Tercero, el trabajo mental: incorporamos un psicólogo deportivo que trabaja de forma regular con el grupo. El rendimiento bajo presión mejoró notablemente desde que implementamos esto.'
+      },
+      {
+        pregunta: 'En el Mundial de Bogotá conseguisteis tres medallas. ¿Cómo se vive eso desde dentro?',
+        respuesta: 'Con mucha emoción pero también con lucidez. Tres medallas es un resultado histórico, pero lo que me dijo que íbamos por buen camino fue cómo competimos. No fue suerte, fue ejecución de un plan. Los relevos los preparamos durante meses, con simulacros de carrera, gestión de ritmo, comunicación entre patinadores. Cuando todo eso sale en competición real, la satisfacción es enorme.'
+      },
+      {
+        pregunta: '¿Cuáles son los objetivos para el próximo ciclo olímpico?',
+        respuesta: 'A corto plazo, medallas en los Campeonatos de Europa 2027. A medio plazo, consolidar a España entre las cinco mejores naciones del mundo en patinaje de velocidad. Y a largo plazo, construir un modelo que se sostenga independientemente de los individuos: que si Chevi se retira, el sistema siga produciendo patinadores de nivel. Eso es lo que diferencia a las grandes potencias.'
+      },
+      {
+        pregunta: 'Un mensaje para los patinadores que sueñan con la selección.',
+        respuesta: 'Que estén listos cuando llegue la oportunidad, porque llega antes de lo que creen. No basta con tener talento: hay que llegar a la selección con la cabeza ordenada, con hábitos de élite, con una actitud profesional aunque aún no sean profesionales. Los que más han progresado en estos tres años son los que se comportan como profesionales desde el primer día de convocatoria.'
+      }
+    ],
+    destacado: 'No fue suerte, fue ejecución de un plan. Los relevos los preparamos durante meses. Cuando todo eso sale en competición real, la satisfacción es enorme.',
+    fecha: '15 Mar 2026',
+    tiempoLectura: '9 min'
+  },
+  {
+    id: 3,
+    nombre: 'Lucía Martín',
+    rol: 'Patinadora élite — Club Gijón PC',
+    cargo: 'Campeona de España Femenina',
+    img: '',
+    quote: 'Ser la número uno de España es un orgullo enorme, pero lo que más me motiva es saber que cada récord que rompo abre el camino a las que vienen detrás.',
+    tags: ['Femenino', 'Récords', 'Inspiración', 'Élite'],
+    intro: 'Lucía Martín ha protagonizado la mejor temporada de su carrera. Campeona de España, poseedora de dos récords nacionales y referente del movimiento de visibilización del patinaje femenino, nos habla sobre sus logros, los obstáculos superados y su papel como modelo para las más jóvenes.',
+    qa: [
+      {
+        pregunta: '¿Cómo describes la temporada 2025 en retrospectiva?',
+        respuesta: 'Como la temporada en la que por fin confié en mí misma. Llevaba años siendo consistente, llegando a finales, pero algo me frenaba en los momentos decisivos. En 2025 trabajé mucho mi gestión emocional y eso se notó. Empecé a disfrutar las carreras en lugar de sufrirlas. Y curiosamente, los resultados mejoraron exponencialmente.'
+      },
+      {
+        pregunta: 'Has hablado mucho de la visibilización del patinaje femenino. ¿Qué hace falta?',
+        respuesta: 'Básicamente lo mismo que en todos los deportes: medios de comunicación que cubran las competiciones femeninas con el mismo rigor que las masculinas, patrocinadores que apuesten por nosotras, y una federación que asigne recursos de manera equitativa. No pedimos privilegios, pedimos igualdad de oportunidades. Cuando una niña de 10 años vea una carrera de mujeres en televisión y piense "yo quiero ser eso", habremos avanzado.'
+      },
+      {
+        pregunta: 'Dos récords nacionales en una temporada. ¿Dónde está el techo?',
+        respuesta: 'No lo he encontrado todavía. En serio. Cada vez que rompo un récord, lo analizo y veo margen. Mi entrenadora y yo hemos identificado que todavía no he alcanzado mi techo técnico: hay detalles en el viraje y en la salida que seguimos perfeccionando. Creo que en los próximos dos o tres años puedo mejorar mis marcas actuales en un 3-4%. En patinaje, eso es enorme.'
+      },
+      {
+        pregunta: '¿Qué le dirías a una niña que quiere empezar a patinar?',
+        respuesta: 'Que empiece. Que no espere a tener el equipo perfecto ni el momento perfecto. Que se presente el primer día aunque tenga miedo, aunque no conozca a nadie, aunque se caiga cien veces. Las caídas enseñan más que las victorias. Y que sepa que hay muchas mujeres aquí delante que hemos limpiado el camino para que ella tenga más fácil llegar donde nosotras tardamos en llegar.'
+      }
+    ],
+    destacado: 'Cada vez que rompo un récord, lo analizo y veo margen. No he encontrado mi techo todavía.',
+    fecha: '1 Mar 2026',
+    tiempoLectura: '8 min'
+  },
+  {
+    id: 4,
+    nombre: 'Daniel Milagros',
+    rol: 'Patinador élite — Club Gijón PC',
+    cargo: 'Medallista Mundial Sub-23',
+    img: '',
+    quote: 'Cada vez que me pongo los patines recuerdo por qué empecé. Ese momento no se va, aunque lleves veinte años compitiendo.',
+    tags: ['Sub-23', 'Técnica', 'Formación', 'Sprint'],
+    intro: 'Daniel Milagros es la gran promesa del sprint español. A sus 22 años ya tiene un bronce mundial en el bolsillo y se perfila como uno de los grandes de la próxima generación. Lo conocemos en profundidad.',
+    qa: [
+      {
+        pregunta: '¿Cómo fue ganar la medalla de bronce en Bogotá?',
+        respuesta: 'Increíble. No lo esperaba con esa intensidad. Llevaba meses preparando esa prueba, sabía que estaba en buen momento, pero cuando cruzas la línea y ves el marcador... es un momento que no se olvida. Pensé en mi familia, en mi entrenador, en todos los años de entrenos desde que tenía 8 años. Todo se comprime en ese segundo.'
+      },
+      {
+        pregunta: '¿Cuál es tu arma diferencial frente a otros sprinters?',
+        respuesta: 'La salida. He trabajado obsesivamente la reacción y los primeros diez metros. En sprint corto, quien domina esa fase domina la carrera. Tengo además una zancada natural bastante larga que me beneficia en superficies lentas. Y creo que mentalmente soy fuerte: no me afectan mucho las posiciones de calle ni los rivales.'
+      },
+      {
+        pregunta: '¿Qué metas te pones para los próximos dos años?',
+        respuesta: 'Primero, consolidarme en el top 5 mundial en 500 metros. Luego, pelear por el campeonato nacional absoluto. Y en paralelo, seguir aprendiendo: quiero pasar tiempo con entrenadores de otros países, ver cómo trabajan las grandes potencias. Tengo 22 años, aún estoy construyendo.'
+      }
+    ],
+    destacado: 'He trabajado obsesivamente la salida y los primeros diez metros. En sprint corto, quien domina esa fase domina la carrera.',
+    fecha: '10 Feb 2026',
+    tiempoLectura: '7 min'
+  }
+];
+ 
+/* ======================================================
+   FUNCIÓN PRINCIPAL: leer ID de URL y renderizar
+   Preparado para Firebase: reemplazar búsqueda en array
+   por query a Firestore/RTDB.
+   ====================================================== */
+function init() {
+  var params = new URLSearchParams(window.location.search);
+  var id = parseInt(params.get('id'));
+ 
+  var entrevista = ENTREVISTAS.find(function(e) { return e.id === id; });
+ 
+  if (!entrevista) {
+    renderNotFound();
+    return;
+  }
+ 
+  renderEntrevista(entrevista);
+  renderSidebar(entrevista);
+  renderMas(entrevista);
+}
+ 
+/* ======================================================
+   RENDERIZAR ENTREVISTA
+   ====================================================== */
+function renderEntrevista(e) {
+  document.title = 'Entrevista — ' + e.nombre + ' · RollerZone';
+ 
+  // Breadcrumb
+  document.getElementById('breadcrumb-nombre').textContent = e.nombre;
+ 
+  // Hero
+  document.getElementById('ent-nombre').textContent = e.nombre;
+  document.getElementById('ent-rol').textContent = e.rol;
+  document.getElementById('ent-quote').textContent = '"' + e.quote + '"';
+  document.getElementById('ent-badge').textContent = e.cargo;
+ 
+  // Tags del hero
+  var tagsHtml = e.tags.map(function(t) {
+    return '<span class="entrevista-tag">' + t + '</span>';
+  }).join('');
+  document.getElementById('ent-tags').innerHTML = tagsHtml;
+ 
+  // Avatar
+  var initials = e.nombre.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('');
+  document.getElementById('ent-initials').textContent = initials;
+  if (e.img) {
+    document.getElementById('ent-avatar-content').innerHTML = '<img class="entrevista-avatar-img" src="' + e.img + '" alt="' + e.nombre + '">';
+  }
+ 
+  // Intro
+  document.getElementById('ent-intro').textContent = e.intro;
+ 
+  // Q&A
+  var qaHtml = '';
+  e.qa.forEach(function(item, i) {
+    qaHtml += '<div class="qa-block">';
+    qaHtml += '<div class="qa-pregunta">';
+    qaHtml += '<span class="qa-p-label">P.</span>';
+    qaHtml += '<span class="qa-p-text">' + item.pregunta + '</span>';
+    qaHtml += '</div>';
+    qaHtml += '<div class="qa-respuesta">';
+    qaHtml += '<span class="qa-r-label">R.</span>';
+    qaHtml += '<span class="qa-r-text">' + item.respuesta + '</span>';
+    qaHtml += '</div>';
+    qaHtml += '</div>';
+ 
+    // Insertar cita destacada después del Q&A central (aprox. mitad de la entrevista)
+    if (e.destacado && i === Math.floor(e.qa.length / 2) - 1) {
+      qaHtml += '<div class="entrevista-destacado">';
+      qaHtml += '<p class="entrevista-destacado-text">"' + e.destacado + '"</p>';
+      qaHtml += '</div>';
+    }
+  });
+  document.getElementById('ent-qa').innerHTML = qaHtml;
+ 
+  // Tags del footer
+  var tagsFooterHtml = e.tags.map(function(t) {
+    return '<span class="article-tag">' + t + '</span>';
+  }).join('');
+  document.getElementById('ent-tags-footer').innerHTML = tagsFooterHtml;
+}
+ 
+/* ======================================================
+   SIDEBAR: otras entrevistas
+   ====================================================== */
+function renderSidebar(actual) {
+  var otras = ENTREVISTAS.filter(function(e) { return e.id !== actual.id; }).slice(0, 3);
+  var html = '';
+  otras.forEach(function(e) {
+    var initials = e.nombre.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('');
+    html += '<div class="sidebar-entrevista-item" onclick="window.location.href=\'entrevista.html?id=' + e.id + '\'">';
+    html += '<div class="sidebar-ent-avatar">';
+    html += e.img ? '<img src="' + e.img + '" alt="' + e.nombre + '">' : initials;
+    html += '</div>';
+    html += '<div>';
+    html += '<div class="sidebar-ent-nombre">' + e.nombre + '</div>';
+    html += '<div class="sidebar-ent-rol">' + e.rol.split('—')[0].trim() + '</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  document.getElementById('sidebar-entrevistas').innerHTML = html;
+}
+ 
+/* ======================================================
+   MÁS ENTREVISTAS (grid inferior)
+   ====================================================== */
+function renderMas(actual) {
+  var otras = ENTREVISTAS.filter(function(e) { return e.id !== actual.id; }).slice(0, 3);
+  var html = '';
+  otras.forEach(function(e) {
+    var initials = e.nombre.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('');
+    html += '<div class="mas-card" onclick="window.location.href=\'entrevista.html?id=' + e.id + '\'">';
+    html += '<div class="mas-card-top">';
+    html += '<div class="mas-avatar">';
+    html += e.img ? '<img src="' + e.img + '" alt="' + e.nombre + '">' : initials;
+    html += '</div>';
+    html += '<div><div class="mas-nombre">' + e.nombre + '</div><div class="mas-rol">' + e.rol.split('—')[0].trim() + '</div></div>';
+    html += '</div>';
+    html += '<p class="mas-quote">"' + e.quote.substring(0, 110) + '…"</p>';
+    html += '<div class="mas-link">Leer entrevista →</div>';
+    html += '</div>';
+  });
+  document.getElementById('mas-grid').innerHTML = html;
+}
+ 
+/* ======================================================
+   NOT FOUND
+   ====================================================== */
+function renderNotFound() {
+  document.getElementById('entrevista-hero').style.display = 'none';
+  document.getElementById('entrevista-layout').innerHTML = '<div class="not-found"><div class="not-found-code">404</div><div class="not-found-title">Entrevista no encontrada</div><p class="not-found-text">La entrevista que buscas no existe o ha sido eliminada.</p><a class="btn-primary" href="index.html">← Volver al inicio</a></div>';
+  document.querySelector('.mas-section').style.display = 'none';
+}
+ 
+/* ======================================================
+   COMPARTIR
+   ====================================================== */
+function shareArticle(platform) {
+  var url = window.location.href;
+  var title = document.getElementById('ent-nombre').textContent + ' — Entrevista RollerZone';
+  if (platform === 'twitter') {
+    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank');
+  } else if (platform === 'whatsapp') {
+    window.open('https://wa.me/?text=' + encodeURIComponent(title + ' ' + url), '_blank');
+  } else if (platform === 'copy') {
+    navigator.clipboard.writeText(url).then(function() { alert('Enlace copiado al portapapeles.'); });
+  }
+}
+ 
+/* ======================================================
+   NEWSLETTER MINI
+   ====================================================== */
+function suscribirNl() {
+  var email = document.getElementById('nl-email').value.trim();
+  if (!email || !email.includes('@')) { alert('Introduce un correo válido.'); return; }
+  var btn = document.querySelector('.nl-mini-btn');
+  btn.textContent = '✓ Suscrito';
+  btn.style.background = '#3DD68C';
+  document.getElementById('nl-email').value = '';
+  setTimeout(function() { btn.textContent = 'Suscribirme →'; btn.style.background = ''; }, 3000);
+}
+ 
+/* ======================================================
+   MÓVIL
+   ====================================================== */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+ 
+/* ======================================================
+   INICIALIZACIÓN
+   ====================================================== */
+document.addEventListener('DOMContentLoaded', init);
+ 
+</script>
+</body>
+</html>
