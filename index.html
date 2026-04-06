@@ -1558,5 +1558,58 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightb
 /* =================== INIT =================== */
 renderAll();
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <script>
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_DOMAIN",
+    projectId: "TU_PROJECT_ID",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+</script>
+  async function loadNews() {
+  const querySnapshot = await getDocs(collection(db, "noticias"));
+
+  const container = document.getElementById("news-container");
+  container.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const noticia = doc.data();
+
+    container.innerHTML += `
+      <div class="news-card" onclick="openNews('${doc.id}')">
+        <h3>${noticia.titulo}</h3>
+      </div>
+    `;
+  });
+}
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function openNews(id) {
+  const docRef = doc(db, "noticias", id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const noticia = docSnap.data();
+
+    document.getElementById("news-detail").style.display = "block";
+
+    document.getElementById("news-detail").innerHTML = `
+      <button onclick="closeNews()">← Volver</button>
+      <h1>${noticia.titulo}</h1>
+      <p><strong>Por:</strong> ${noticia.autor || "Sin autor"}</p>
+      <p>${noticia.contenido}</p>
+
+      <button onclick="shareFacebook()">Facebook</button>
+      <button onclick="copyLink()">Copiar enlace</button>
+    `;
+  }
+}
 </body>
 </html>
