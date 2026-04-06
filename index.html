@@ -1082,6 +1082,9 @@ function renderNoticias(){
     gridHTML+='<div class="news-meta"><span>'+featured.fecha+'</span>'+(featured.tiempo?'<span style="color:var(--muted)">'+featured.tiempo+'</span>':'')+'</div>';
     gridHTML+='</article>';
   }
+  card.onclick = () => {
+  window.location.href = "noticia.html?id=" + noticia.id;
+};
   var smalls=others.slice(0,2);
   smalls.forEach(function(n,i){
     gridHTML+='<article class="news-card small">';
@@ -1558,5 +1561,26 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightb
 /* =================== INIT =================== */
 renderAll();
 </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Noticia</title>
+</head>
+<body>
+
+<h1 id="titulo"></h1>
+<p id="contenido"></p>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+// Aquí luego conectaremos con Firebase
+console.log("ID noticia:", id);
+</script>
+
 </body>
 </html>
