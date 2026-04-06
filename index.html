@@ -146,3 +146,16 @@ const app = initializeApp(firebaseConfig);
 
 </body>
 </html>
+<button id="guardar">Guardar dato</button>
+<script>
+document.getElementById('guardar').addEventListener('click', () => {
+  db.collection('prueba').add({
+    nombre: 'Juan',
+    edad: 30,
+    fecha: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => alert('Dato guardado en Firestore!'))
+  .catch(error => console.error('Error al guardar:', error));
+});
+</script>
+
