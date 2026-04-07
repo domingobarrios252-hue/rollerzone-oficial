@@ -1071,7 +1071,7 @@ function renderNoticias(){
   var others=DB.noticias.filter(function(n){return !n.featured;});
   var gridHTML='';
   if(featured){
-    gridHTML+='<article class="news-card featured">';
+    gridHTML+='<article class="news-card featured" onclick="window.location.href=\'noticia.html?id='+featured.id+'\'" style="cursor:pointer">';
     gridHTML+='<div class="hero-img-placeholder">';
     if(featured.img){ gridHTML+='<img class="news-img-real" src="'+featured.img+'" alt="">'; }
     else { gridHTML+='<svg viewBox="0 0 200 120" fill="none"><ellipse cx="100" cy="60" rx="80" ry="38" stroke="#F5A623" stroke-width="2"/><circle cx="100" cy="60" r="12" fill="#F5A623" opacity="0.3"/><line x1="20" y1="60" x2="180" y2="60" stroke="#F5A623" stroke-width="1" opacity="0.7"/></svg>'; }
@@ -1080,14 +1080,12 @@ function renderNoticias(){
     gridHTML+='<h3 class="news-title">'+featured.titulo+'</h3>';
     if(featured.excerpt) gridHTML+='<p class="news-excerpt">'+featured.excerpt+'</p>';
     gridHTML+='<div class="news-meta"><span>'+featured.fecha+'</span>'+(featured.tiempo?'<span style="color:var(--muted)">'+featured.tiempo+'</span>':'')+'</div>';
+    gridHTML+='<div style="margin-top:1rem"><span style="font-family:\'Barlow Condensed\',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)">Leer más →</span></div>';
     gridHTML+='</article>';
   }
-  card.onclick = () => {
-  window.location.href = "noticia.html?id=" + noticia.id;
-};
   var smalls=others.slice(0,2);
   smalls.forEach(function(n,i){
-    gridHTML+='<article class="news-card small">';
+    gridHTML+='<article class="news-card small" onclick="window.location.href=\'noticia.html?id='+n.id+'\'" style="cursor:pointer">';
     gridHTML+='<div class="small-num">0'+(i+1)+'</div>';
     gridHTML+='<div class="small-content">';
     gridHTML+='<div class="news-category '+catClass(n.cat)+'">'+n.cat+'</div>';
@@ -1099,12 +1097,13 @@ function renderNoticias(){
   var moreItems=others.slice(2,5);
   var moreHTML='';
   moreItems.forEach(function(n){
-    moreHTML+='<article class="more-news-card">';
+    moreHTML+='<article class="more-news-card" onclick="window.location.href=\'noticia.html?id='+n.id+'\'" style="cursor:pointer">';
     if(n.img) moreHTML+='<img class="news-img-thumb" src="'+n.img+'" alt="">';
     moreHTML+='<div class="news-category '+catClass(n.cat)+'">'+n.cat+'</div>';
     moreHTML+='<h3 class="news-title">'+n.titulo+'</h3>';
     if(n.excerpt) moreHTML+='<p class="news-excerpt">'+n.excerpt+'</p>';
     moreHTML+='<div class="news-meta"><span>'+n.fecha+'</span>'+(n.tiempo?'<span style="color:var(--muted)">'+n.tiempo+'</span>':'')+'</div>';
+    moreHTML+='<div style="margin-top:.5rem"><span style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)">Leer más →</span></div>';
     moreHTML+='</article>';
   });
   more.innerHTML=moreHTML;
@@ -1136,7 +1135,7 @@ function renderEntrevistas(){
   DB.entrevistas.forEach(function(e){
     var tags=(e.tags||'').split(',').map(function(t){return '<span class="entrevista-tag">'+t.trim()+'</span>';}).join('');
     var initials=e.nombre.split(' ').map(function(w){return w[0];}).slice(0,2).join('');
-    html+='<div class="entrevista-card">';
+    html+='<div class="entrevista-card" onclick="window.location.href=\'entrevista.html?id='+e.id+'\'" style="cursor:pointer">';
     html+='<div class="entrevista-top">';
     html+='<div class="entrevista-avatar">'+(e.img?'<img src="'+e.img+'" alt="">':initials)+'</div>';
     html+='<div><div class="entrevista-nombre">'+e.nombre+'</div><div class="entrevista-rol">'+e.rol+'</div></div>';
@@ -1561,26 +1560,5 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightb
 /* =================== INIT =================== */
 renderAll();
 </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Noticia</title>
-</head>
-<body>
-
-<h1 id="titulo"></h1>
-<p id="contenido"></p>
-
-<script>
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
-
-// Aquí luego conectaremos con Firebase
-console.log("ID noticia:", id);
-</script>
-
 </body>
 </html>
