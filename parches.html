@@ -1,0 +1,106 @@
+<!-- ==============================================================
+  BLOQUE 1 — Reemplazar el HERO estático de index.html
+  
+  BUSCA (desde línea ~469):
+    <!-- ===== HERO (dinámico) ===== -->
+    <section class="hero" id="hero-section">
+      ...toda la sección hasta...
+    </section>
+
+  REEMPLAZA POR ESTO:
+  ============================================================== -->
+
+<!-- ===== HERO — Inyectado por cms-loader.js ===== -->
+<div id="cms-hero">
+  <section class="hero" id="portada">
+    <div class="hero-bg"></div>
+    <div class="hero-accent"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-number">01</div>
+    <div class="hero-content">
+      <span class="hero-tag" style="visibility:hidden;">Cargando</span>
+      <h1 class="hero-title" style="opacity:.12;">Cargando portada…</h1>
+      <div class="hero-excerpt" style="opacity:.12;">Por favor espera mientras se cargan las noticias.</div>
+    </div>
+  </section>
+</div>
+
+<!-- ==============================================================
+  BLOQUE 2 — Reemplazar la sección NOTICIAS estática
+  
+  BUSCA (desde línea ~511):
+    <!-- ===== NOTICIAS ===== -->
+    <div id="noticias">
+      ...
+    </div>
+
+  REEMPLAZA POR ESTO:
+  ============================================================== -->
+
+<!-- ===== NOTICIAS — Dinámicas desde Netlify CMS ===== -->
+<div id="noticias">
+  <div class="section">
+    <div class="section-header reveal">
+      <h2 class="section-title">Últimas <em>Noticias</em></h2>
+      <a class="see-all" href="#">Ver todas →</a>
+    </div>
+    <!-- Grid principal: noticia hero + secundarias + más noticias -->
+    <div id="cms-news-grid" class="reveal">
+      <div class="cms-loading">Cargando noticias</div>
+    </div>
+  </div>
+  <!-- Lista compacta de últimas noticias -->
+  <div class="section" style="padding-top:0;">
+    <div class="section-header reveal">
+      <h2 class="section-title"><em>Más</em> Noticias</h2>
+    </div>
+    <div id="cms-ultimas" class="reveal reveal-delay-1"></div>
+  </div>
+</div>
+
+<!-- ==============================================================
+  BLOQUE 3 — Sección PATROCINADORES
+  
+  PEGA ESTO justo ANTES de la sección NEWSLETTER:
+    <!-- ===== NEWSLETTER ===== -->
+  ============================================================== -->
+
+<!-- ===== PATROCINADORES — Dinámicos desde Netlify CMS ===== -->
+<div id="sponsors-section">
+  <section class="sponsors-section" id="patrocinadores">
+    <div class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">PATRO<em>CINADORES</em></h2>
+        <span class="see-all" style="cursor:default;opacity:.5;">Confían en nosotros</span>
+      </div>
+      <div class="cms-loading reveal">Cargando patrocinadores</div>
+    </div>
+  </section>
+</div>
+
+<!-- ==============================================================
+  BLOQUE 4 — Script a añadir ANTES del bloque <script> inline
+  
+  Busca la última etiqueta <script> del archivo y ANTES añade:
+  ============================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="/js/cms-loader.js" defer></script>
+
+<!-- ==============================================================
+  BLOQUE 5 — Cambio en NAV: añadir enlace a Patrocinadores
+  
+  BUSCA:
+    <li><a href="#revista">Revista</a></li>
+  AÑADE DESPUÉS:
+  ============================================================== -->
+<li><a href="#patrocinadores">Patrocinadores</a></li>
+
+<!-- Y en .mobile-menu, busca la última <a href="#revista">Revista</a>
+     y añade después: -->
+<a href="#patrocinadores">Patrocinadores</a>
+
+<!-- ==============================================================
+  BLOQUE 6 — noticia.html: añadir en el <head>
+  ============================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
