@@ -429,7 +429,59 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
   .galeria-grid{grid-template-columns:1fr 1fr;}
   .galeria-item:first-child{grid-column:span 2;}
   .admin-stats-row{grid-template-columns:1fr 1fr;}
+  .sponsors-grid{grid-template-columns:1fr 1fr;}
+  .sponsor-logo-wrap{height:56px;}
 }
+
+/* ===================================================================
+   PATROCINADORES — Sistema dinámico CMS
+   =================================================================== */
+.sponsors-section{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.sponsors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+.sponsor-card{
+  position:relative;background:var(--card);
+  padding:2rem 1.5rem 1.5rem;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  text-decoration:none;color:inherit;overflow:hidden;
+  transition:background .25s,transform .25s,box-shadow .25s;
+}
+.sponsor-card:hover{background:var(--card2);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.45);z-index:2;}
+/* Borde superior de color según nivel */
+.sponsor-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border-solid);transition:height .25s;}
+.sponsor-card:hover::before{height:4px;}
+.sponsor-oro::before{background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.sponsor-plata::before{background:linear-gradient(90deg,#a8a8a8,#e0e0e0);}
+.sponsor-bronce::before{background:linear-gradient(90deg,#8B5E3C,#CD7F32);}
+/* Efecto destello en nivel oro */
+.sponsor-oro::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(245,166,35,.07),transparent);transition:left .55s ease;pointer-events:none;}
+.sponsor-oro:hover::after{left:150%;}
+/* Badge de nivel */
+.sponsor-level-badge{position:absolute;top:.6rem;right:.75rem;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 7px;}
+.sponsor-oro   .sponsor-level-badge{color:var(--gold);background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);}
+.sponsor-plata .sponsor-level-badge{color:#C0C0C0;background:rgba(192,192,192,.1);border:1px solid rgba(192,192,192,.25);}
+.sponsor-bronce .sponsor-level-badge{color:#CD7F32;background:rgba(205,127,50,.1);border:1px solid rgba(205,127,50,.25);}
+/* Logo */
+.sponsor-logo-wrap{width:100%;height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;flex-shrink:0;}
+.sponsor-logo{max-width:130px;max-height:70px;object-fit:contain;filter:grayscale(40%) brightness(.9);transition:filter .3s,transform .3s;}
+.sponsor-card:hover .sponsor-logo{filter:grayscale(0%) brightness(1.12);transform:scale(1.07);}
+.sponsor-logo-placeholder{width:70px;height:70px;background:var(--card2);border:1px solid var(--border-solid);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);transition:background .25s,transform .25s;}
+.sponsor-card:hover .sponsor-logo-placeholder{background:var(--border-solid);transform:scale(1.04);}
+/* Info */
+.sponsor-info{flex:1;width:100%;}
+.sponsor-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.5px;color:var(--text);margin-bottom:.4rem;line-height:1.2;}
+.sponsor-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+/* Flecha */
+.sponsor-arrow{margin-top:1rem;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;display:flex;align-items:center;gap:6px;}
+.sponsor-arrow::before{content:'';width:14px;height:1px;background:var(--gold);transition:width .2s;}
+.sponsor-card:hover .sponsor-arrow{opacity:1;transform:translateY(0);}
+.sponsor-card:hover .sponsor-arrow::before{width:22px;}
+/* Loading spinner */
+.cms-loading{display:flex;align-items:center;justify-content:center;height:200px;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);gap:12px;}
+.cms-loading::before{content:'';width:18px;height:18px;border:2px solid var(--border-solid);border-top-color:var(--gold);border-radius:50%;animation:cms-spin .8s linear infinite;flex-shrink:0;}
+@keyframes cms-spin{to{transform:rotate(360deg);}}
+/* Responsive sponsors */
+@media(max-width:1024px){.sponsors-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:700px) {.sponsors-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -444,6 +496,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
     <li><a href="#entrevistas">Entrevistas</a></li>
     <li><a href="#eventos">Eventos</a></li>
     <li><a href="#revista">Revista</a></li>
+    <li><a href="#patrocinadores">Patrocinadores</a></li>
   </ul>
   <div class="nav-right">
     <button class="nav-admin-btn" onclick="openAdmin()">
@@ -464,26 +517,22 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
   <a href="#entrevistas">Entrevistas</a>
   <a href="#eventos">Eventos</a>
   <a href="#revista">Revista</a>
+  <a href="#patrocinadores">Patrocinadores</a>
 </div>
 
-<!-- ===== HERO (dinámico) ===== -->
-<section class="hero" id="hero-section">
-  <div class="hero-bg"></div>
-  <div id="hero-bg-img-wrap"></div>
-  <div class="hero-accent"></div>
-  <div class="hero-lines"></div>
-  <div class="hero-number" id="hero-num">01</div>
-  <div class="hero-content">
-    <div class="hero-tag" id="hero-tag">En Vivo · Abril 2026</div>
-    <h1 class="hero-title" id="hero-title">Speed Track<br>Gijón <em>2026</em></h1>
-    <div class="hero-meta" id="hero-meta">Por <span>Redacción RollerZone</span> · 3 Abr 2026 · <span>Patinaje Velocidad</span></div>
-    <p class="hero-excerpt" id="hero-excerpt">La pista de Moreda acoge la primera gran prueba del calendario nacional. Todo lo que necesitas saber sobre el evento, los favoritos y los récords en juego.</p>
-    <div class="hero-btns">
-      <a class="btn-primary" href="#noticias">Leer Reportaje →</a>
-      <a class="btn-ghost" href="#eventos">Ver Calendario</a>
+<!-- ===== HERO — Inyectado dinámicamente por cms-loader.js ===== -->
+<div id="cms-hero">
+  <section class="hero" id="portada">
+    <div class="hero-bg"></div>
+    <div class="hero-accent"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-number">01</div>
+    <div class="hero-content">
+      <span class="hero-tag" style="background:var(--card2);color:var(--muted);">Cargando</span>
+      <h1 class="hero-title" style="opacity:.1;">—</h1>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- ===== TICKER ===== -->
 <div class="ticker" aria-label="Noticias en tiempo real">
@@ -508,15 +557,24 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
   </div>
 </div>
 
-<!-- ===== NOTICIAS ===== -->
+<!-- ===== NOTICIAS — Dinámicas desde Netlify CMS ===== -->
 <div id="noticias">
   <div class="section">
     <div class="section-header reveal">
       <h2 class="section-title">Últimas <em>Noticias</em></h2>
       <a class="see-all" href="#">Ver todas →</a>
     </div>
-    <div class="news-grid reveal" id="news-grid"></div>
-    <div class="more-news-grid reveal reveal-delay-1" id="more-news-grid"></div>
+    <!-- Grid: hero grande + noticias secundarias (inyectado por cms-loader.js) -->
+    <div id="cms-news-grid" class="reveal">
+      <div class="cms-loading">Cargando noticias</div>
+    </div>
+  </div>
+  <!-- Lista compacta de últimas noticias -->
+  <div class="section" style="padding-top:0;">
+    <div class="section-header reveal">
+      <h2 class="section-title"><em>Más</em> Noticias</h2>
+    </div>
+    <div id="cms-ultimas" class="reveal reveal-delay-1"></div>
   </div>
 </div>
 
@@ -653,201 +711,21 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
     </div>
   </div>
 </div>
-  /* ===================================================
-   PATROCINADORES — Sistema dinámico CMS
-   =================================================== */
-.sponsors-section {
-  background: var(--dark);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
 
-.sponsors-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-}
-
-.sponsor-card {
-  position: relative;
-  background: var(--card);
-  padding: 2rem 1.5rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
-  transition: background 0.25s, transform 0.25s;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-}
-
-.sponsor-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--border-solid);
-  transition: background 0.25s;
-}
-
-.sponsor-card:hover {
-  background: var(--card2);
-  transform: translateY(-3px);
-}
-
-/* Color del borde superior según nivel */
-.sponsor-oro::before   { background: var(--gold); }
-.sponsor-plata::before { background: #C0C0C0; }
-.sponsor-bronce::before{ background: #CD7F32; }
-
-.sponsor-level-badge {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.75rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 0;
-}
-
-.sponsor-oro   .sponsor-level-badge { color: var(--gold);   background: rgba(245,166,35,.12);  border: 1px solid rgba(245,166,35,.3); }
-.sponsor-plata .sponsor-level-badge { color: #C0C0C0;       background: rgba(192,192,192,.1);  border: 1px solid rgba(192,192,192,.25); }
-.sponsor-bronce .sponsor-level-badge{ color: #CD7F32;       background: rgba(205,127,50,.1);   border: 1px solid rgba(205,127,50,.25); }
-
-.sponsor-logo-wrap {
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  flex-shrink: 0;
-}
-
-.sponsor-logo {
-  max-width: 130px;
-  max-height: 70px;
-  object-fit: contain;
-  filter: grayscale(30%);
-  transition: filter 0.25s, transform 0.25s;
-}
-
-.sponsor-card:hover .sponsor-logo {
-  filter: grayscale(0%) brightness(1.1);
-  transform: scale(1.05);
-}
-
-.sponsor-logo-placeholder {
-  width: 70px;
-  height: 70px;
-  background: var(--card2);
-  border: 1px solid var(--border-solid);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
-  color: var(--gold);
-  letter-spacing: 2px;
-  transition: background 0.25s;
-}
-
-.sponsor-card:hover .sponsor-logo-placeholder {
-  background: var(--border-solid);
-}
-
-.sponsor-info {
-  flex: 1;
-}
-
-.sponsor-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-  line-height: 1.2;
-}
-
-.sponsor-desc {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.sponsor-arrow {
-  margin-top: 1rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  color: var(--gold);
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.sponsor-card:hover .sponsor-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ── Sección noticias CMS ── */
-#cms-hero { display: block; }
-
-#cms-news-grid .news-grid,
-#cms-news-grid .more-news-grid {
-  /* Hereda estilos existentes */
-}
-
-/* ── Loading state ── */
-.cms-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.cms-loading::before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-solid);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 0.75rem;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Responsive sponsors ── */
-@media (max-width: 900px) {
-  .sponsors-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 520px) {
-  .sponsors-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .sponsor-logo-wrap {
-    height: 60px;
-  }
-}
+<!-- ===== PATROCINADORES — Dinámicos desde Netlify CMS ===== -->
+<div id="sponsors-section">
+  <section class="sponsors-section" id="patrocinadores">
+    <div class="section">
+      <div class="section-header reveal">
+        <h2 class="section-title">PATRO<em>CINADORES</em></h2>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Confían en nosotros</span>
+      </div>
+      <div class="sponsors-grid reveal" id="sponsors-grid">
+        <div class="cms-loading" style="grid-column:1/-1;">Cargando patrocinadores</div>
+      </div>
+    </div>
+  </section>
+</div>
 
 <!-- ===== NEWSLETTER ===== -->
 <div class="newsletter-bar">
@@ -1200,6 +1078,10 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
 <!-- TOAST -->
 <div class="admin-toast" id="admin-toast"></div>
 
+<!-- Motor CMS: lee markdown de Netlify CMS y rellena hero, noticias y patrocinadores -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="/js/cms-loader.js" defer></script>
+
 <!-- ============================================================
      JAVASCRIPT
      ============================================================ -->
@@ -1343,7 +1225,8 @@ function renderEntrevistas(){
   grid.innerHTML=html;
 }
 
-function renderAll(){ renderHero(); renderNoticias(); renderEventos(); renderEntrevistas(); }
+// renderHero y renderNoticias ahora los gestiona /js/cms-loader.js
+function renderAll(){ renderEventos(); renderEntrevistas(); }
 
 /* =================== ADMIN TABLE RENDERS =================== */
 function renderAdminNoticias(){
@@ -1753,6 +1636,15 @@ function closeLightbox(){
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightbox();closeAdmin();}});
 
 /* =================== INIT =================== */
+// Hero y noticias los gestiona cms-loader.js
+// Aquí solo renderizamos los datos estáticos (eventos, entrevistas, ticker, hero-admin)
+function renderAll(){
+  // renderHero() — gestionado por cms-loader.js
+  // renderNoticias() — gestionado por cms-loader.js
+  renderEventos();
+  renderEntrevistas();
+  renderTicker();
+}
 renderAll();
 </script>
 </body>
