@@ -1,5 +1,4 @@
 [build]
-  # Ejecuta el script de índice antes de publicar
   command = "node build-news-index.js"
   publish = "."
 
