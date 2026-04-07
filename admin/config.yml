@@ -6,13 +6,77 @@ media_folder: "img"
 public_folder: "/img"
 
 collections:
+  # =========================================================
+  # NOTICIAS
+  # =========================================================
   - name: "noticias"
     label: "Noticias"
     folder: "noticias"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - { label: "Título", name: "title", widget: "string" }
-      - { label: "Fecha", name: "date", widget: "datetime" }
-      - { label: "Imagen", name: "image", widget: "image" }
-      - { label: "Contenido", name: "body", widget: "markdown" }
+      - {label: "Título", name: "title", widget: "string"}
+      - {label: "Fecha", name: "date", widget: "datetime"}
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        options:
+          - { label: "Reportaje", value: "Reportaje" }
+          - { label: "Selección", value: "Seleccion" }
+          - { label: "Técnica", value: "Tecnica" }
+          - { label: "Entrevista", value: "Entrevista" }
+          - { label: "Competición", value: "Competicion" }
+          - { label: "Internacional", value: "Internacional" }
+      - {label: "Imagen destacada", name: "image", widget: "image"}
+      - {label: "Extracto (resumen breve, 2-3 frases)", name: "excerpt", widget: "text"}
+      - {label: "Autor", name: "author", widget: "string", default: "Redacción RollerZone"}
+      - {label: "Destacada en portada", name: "featured", widget: "boolean", default: false}
+      - {label: "Contenido", name: "body", widget: "markdown"}
+
+  # =========================================================
+  # EVENTOS
+  # =========================================================
+  - name: "eventos"
+    label: "Eventos"
+    folder: "eventos"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Nombre del evento", name: "title", widget: "string"}
+      - {label: "Fecha del evento", name: "date", widget: "datetime"}
+      - {label: "Lugar", name: "lugar", widget: "string"}
+      - {label: "Ciudad / País", name: "ciudad", widget: "string"}
+      - label: "Tipo"
+        name: "tipo"
+        widget: "select"
+        options:
+          - { label: "Nacional", value: "nacional" }
+          - { label: "Internacional", value: "internacional" }
+          - { label: "Copa", value: "copa" }
+          - { label: "Campeonato", value: "campeonato" }
+      - {label: "Cartel / Imagen", name: "image", widget: "image", required: false}
+      - {label: "Descripción", name: "body", widget: "markdown", required: false}
+
+  # =========================================================
+  # PATROCINADORES  ← NUEVA COLECCIÓN
+  # =========================================================
+  - name: "patrocinadores"
+    label: "Patrocinadores"
+    folder: "patrocinadores"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Nombre de la empresa", name: "title", widget: "string"}
+      - {label: "Logo", name: "logo", widget: "image"}
+      - {label: "Descripción breve (1-2 líneas)", name: "descripcion", widget: "text"}
+      - {label: "Enlace (web o redes sociales)", name: "enlace", widget: "string"}
+      - label: "Nivel de patrocinio"
+        name: "nivel"
+        widget: "select"
+        options:
+          - { label: "Oro (Principal)", value: "oro" }
+          - { label: "Plata", value: "plata" }
+          - { label: "Bronce", value: "bronce" }
+        default: "bronce"
+      - {label: "Orden de aparición (número)", name: "orden", widget: "number", default: 99}
+      - {label: "Activo", name: "activo", widget: "boolean", default: true}
