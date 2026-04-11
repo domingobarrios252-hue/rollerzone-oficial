@@ -150,12 +150,33 @@ nav{position:sticky;top:0;z-index:200;background:rgba(13,13,13,0.97);border-bott
 .evento-lugar{font-size:12px;color:var(--muted);}
 .evento-inscritos{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--green);margin-top:.4rem;font-weight:600;letter-spacing:.5px;}
 
-/* ===== RANKING ===== */
+/* ===== RANKING MVP ===== */
 .ranking-section{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.ranking-tabs{display:flex;border-bottom:1px solid var(--border-solid);overflow-x:auto;}
-.ranking-tab{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;}
-.ranking-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-.ranking-tab:hover:not(.active){color:var(--text);}
+/* Category selector */
+.ranking-cat-selector{display:flex;gap:0;border-bottom:2px solid var(--border-solid);overflow-x:auto;}
+.ranking-cat-btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--muted);padding:12px 28px;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap;position:relative;}
+.ranking-cat-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.ranking-cat-btn:hover:not(.active){color:var(--text);}
+.ranking-cat-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-left:6px;vertical-align:middle;}
+.badge-elite{background:rgba(245,166,35,.2);color:var(--gold);border:1px solid rgba(245,166,35,.4);}
+.badge-estrella{background:rgba(74,158,255,.15);color:var(--blue);border:1px solid rgba(74,158,255,.3);}
+.badge-promesa{background:rgba(61,214,140,.15);color:var(--green);border:1px solid rgba(61,214,140,.3);}
+/* Gender tabs inside each category */
+.ranking-gender-tabs{display:flex;gap:0;padding:0 0 0 0;border-bottom:1px solid var(--border-solid);}
+.ranking-gender-tab{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:9px 22px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;}
+.ranking-gender-tab.active{color:var(--text);border-bottom-color:var(--text);}
+.ranking-gender-tab:hover:not(.active){color:var(--text);}
+/* Panels */
+.ranking-cat-panel{display:none;}
+.ranking-cat-panel.active{display:block;}
+.ranking-gender-panel{display:none;}
+.ranking-gender-panel.active{display:block;}
+/* MVP header bar */
+.ranking-mvp-header{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(245,166,35,.04);border-bottom:1px solid var(--border-solid);}
+.ranking-mvp-crown{font-size:20px;line-height:1;}
+.ranking-mvp-label{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--gold);}
+.ranking-mvp-desc{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted);letter-spacing:.5px;margin-left:auto;}
+/* Table */
 .ranking-table-wrap{overflow-x:auto;}
 .ranking-table{width:100%;border-collapse:collapse;}
 .ranking-table th{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border-solid);}
@@ -176,6 +197,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(13,13,13,0.97);border-bott
 .time-mark{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;color:var(--text);}
 .time-mark.record{color:var(--gold);}
 .time-mark.record::after{content:' RN';font-size:9px;background:var(--gold);color:var(--black);padding:1px 4px;margin-left:4px;letter-spacing:1px;vertical-align:middle;}
+/* Deprecated generic panels kept for JS compat */
 .ranking-panel{display:none;}
 .ranking-panel.active{display:block;}
 
@@ -599,49 +621,111 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.5rem
   </div>
 </div>
 
-<!-- ===== RANKING ===== -->
+<!-- ===== RANKING MVP ROLLERZONE SPAIN ===== -->
 <div class="ranking-section" id="ranking">
   <div class="section">
     <div class="section-header reveal">
-      <h2 class="section-title">Ranking <em>Nacional</em></h2>
+      <h2 class="section-title">Ranking <em>MVP RollerZone Spain</em></h2>
       <a class="see-all" href="#">Ranking completo →</a>
     </div>
-    <div class="ranking-tabs">
-      <button class="ranking-tab active" onclick="switchTab(this,'tab-500')">500m</button>
-      <button class="ranking-tab" onclick="switchTab(this,'tab-1000')">1000m</button>
-      <button class="ranking-tab" onclick="switchTab(this,'tab-5000')">5000m</button>
-      <button class="ranking-tab" onclick="switchTab(this,'tab-fem')">Femenino</button>
+
+    <!-- Selector de categoría -->
+    <div class="ranking-cat-selector">
+      <button class="ranking-cat-btn active" onclick="switchCat(this,'cat-elite')">Élite <span class="ranking-cat-badge badge-elite">TOP</span></button>
+      <button class="ranking-cat-btn" onclick="switchCat(this,'cat-estrella')">Estrella <span class="ranking-cat-badge badge-estrella">U23</span></button>
+      <button class="ranking-cat-btn" onclick="switchCat(this,'cat-promesa')">Promesa <span class="ranking-cat-badge badge-promesa">JR</span></button>
     </div>
-    <div class="ranking-panel active" id="tab-500">
-      <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Tiempo</th><th>Puntos</th><th>±</th></tr></thead><tbody>
-        <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Chevi Guzmán</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="time-mark record">36.44</span></td><td><span class="pts">440</span></td><td><span class="delta up">↑ 3</span></td></tr>
-        <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇨🇴 Juan P. Estrada</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="time-mark">36.72</span></td><td><span class="pts">418</span></td><td><span class="delta up">↑ 1</span></td></tr>
-        <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Adrián Alonso</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="time-mark">36.99</span></td><td><span class="pts">401</span></td><td><span class="delta same">—</span></td></tr>
-        <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇨🇭 Livio Wenger</div><div class="racer-club">Valencia Speed</div></td><td>Valencia S.</td><td><span class="time-mark">37.18</span></td><td><span class="pts">385</span></td><td><span class="delta down">↓ 1</span></td></tr>
-        <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Iñigo Urrutia</div><div class="racer-club">Euskadi Patín</div></td><td>Euskadi P.</td><td><span class="time-mark">37.31</span></td><td><span class="pts">370</span></td><td><span class="delta up">↑ 2</span></td></tr>
-      </tbody></table></div>
+
+    <!-- ========== ÉLITE ========== -->
+    <div class="ranking-cat-panel active" id="cat-elite">
+      <div class="ranking-gender-tabs">
+        <button class="ranking-gender-tab active" onclick="switchGender(this,'elite-masc')">♂ Masculino</button>
+        <button class="ranking-gender-tab" onclick="switchGender(this,'elite-fem')">♀ Femenino</button>
+      </div>
+      <!-- Élite Masculino -->
+      <div class="ranking-gender-panel active" id="elite-masc">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">👑</span><span class="ranking-mvp-label">Élite Masculino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Chevi Guzmán</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="pts">440</span></td><td><span class="delta up">↑ 3</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Daniel Milagros</div><div class="racer-club">Selección Nacional</div></td><td>CD Gijón</td><td><span class="pts">418</span></td><td><span class="delta up">↑ 1</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇨🇴 Juan P. Estrada</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="pts">401</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Adrián Alonso</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="pts">385</span></td><td><span class="delta down">↓ 1</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇨🇭 Livio Wenger</div><div class="racer-club">Valencia Speed</div></td><td>Valencia S.</td><td><span class="pts">370</span></td><td><span class="delta up">↑ 2</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Élite Femenino -->
+      <div class="ranking-gender-panel" id="elite-fem">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">👑</span><span class="ranking-mvp-label">Élite Femenino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinadora</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Lucía Martín Fdez.</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="pts">420</span></td><td><span class="delta up">↑ 3</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Ana Romero Vega</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="pts">405</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇨🇴 Valentina Ríos C.</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="pts">388</span></td><td><span class="delta up">↑ 2</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Sara Gómez Fdez.</div><div class="racer-club">Sevilla Rollers</div></td><td>Sevilla R.</td><td><span class="pts">372</span></td><td><span class="delta down">↓ 1</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Marta Iglesias P.</div><div class="racer-club">Euskadi Patín</div></td><td>Euskadi P.</td><td><span class="pts">358</span></td><td><span class="delta up">↑ 1</span></td></tr>
+        </tbody></table></div>
+      </div>
     </div>
-    <div class="ranking-panel" id="tab-1000">
-      <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Tiempo</th><th>Puntos</th><th>±</th></tr></thead><tbody>
-        <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Daniel Milagros</div><div class="racer-club">Selección Nacional</div></td><td>CD Gijón</td><td><span class="time-mark record">1:11.44</span></td><td><span class="pts">410</span></td><td><span class="delta up">↑ 1</span></td></tr>
-        <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇨🇴 Juan P. Estrada</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="time-mark">1:12.08</span></td><td><span class="pts">392</span></td><td><span class="delta up">↑ 4</span></td></tr>
-        <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Chevi Guzmán</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="time-mark">1:12.35</span></td><td><span class="pts">378</span></td><td><span class="delta down">↓ 2</span></td></tr>
-      </tbody></table></div>
+
+    <!-- ========== ESTRELLA ========== -->
+    <div class="ranking-cat-panel" id="cat-estrella">
+      <div class="ranking-gender-tabs">
+        <button class="ranking-gender-tab active" onclick="switchGender(this,'estrella-masc')">♂ Masculino</button>
+        <button class="ranking-gender-tab" onclick="switchGender(this,'estrella-fem')">♀ Femenino</button>
+      </div>
+      <!-- Estrella Masculino -->
+      <div class="ranking-gender-panel active" id="estrella-masc">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">⭐</span><span class="ranking-mvp-label" style="color:var(--blue)">Estrella Masculino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Roberto Cano</div><div class="racer-club">Sevilla Rollers</div></td><td>Sevilla R.</td><td><span class="pts">395</span></td><td><span class="delta up">↑ 2</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Marcos Fdez. Ríos</div><div class="racer-club">Club Astur Speed</div></td><td>Astur Speed</td><td><span class="pts">378</span></td><td><span class="delta up">↑ 1</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Iñigo Urrutia</div><div class="racer-club">Euskadi Patín</div></td><td>Euskadi P.</td><td><span class="pts">362</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Carlos Blanco M.</div><div class="racer-club">Galicia Speed Club</div></td><td>Galicia SC</td><td><span class="pts">344</span></td><td><span class="delta down">↓ 2</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Pablo Cortés V.</div><div class="racer-club">Zaragoza Inline</div></td><td>Zgz Inline</td><td><span class="pts">331</span></td><td><span class="delta up">↑ 3</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Estrella Femenino -->
+      <div class="ranking-gender-panel" id="estrella-fem">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">⭐</span><span class="ranking-mvp-label" style="color:var(--blue)">Estrella Femenino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinadora</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Noa Vidal Torres</div><div class="racer-club">Valencia Speed</div></td><td>Valencia S.</td><td><span class="pts">388</span></td><td><span class="delta up">↑ 4</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Carla Pons Serra</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="pts">370</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Alba Ruiz Mora</div><div class="racer-club">Sevilla Rollers</div></td><td>Sevilla R.</td><td><span class="pts">355</span></td><td><span class="delta up">↑ 1</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Irene Soto Leal</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="pts">339</span></td><td><span class="delta down">↓ 1</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Claudia Méndez R.</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="pts">322</span></td><td><span class="delta up">↑ 2</span></td></tr>
+        </tbody></table></div>
+      </div>
     </div>
-    <div class="ranking-panel" id="tab-5000">
-      <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Tiempo</th><th>Puntos</th><th>±</th></tr></thead><tbody>
-        <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Roberto Cano</div><div class="racer-club">Sevilla Rollers</div></td><td>Sevilla R.</td><td><span class="time-mark record">6:48.12</span></td><td><span class="pts">445</span></td><td><span class="delta up">↑ 6</span></td></tr>
-        <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇨🇴 Juan P. Estrada</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="time-mark">6:50.44</span></td><td><span class="pts">428</span></td><td><span class="delta down">↓ 1</span></td></tr>
-        <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Marcos Fdez. Ríos</div><div class="racer-club">Club Astur Speed</div></td><td>Astur Speed</td><td><span class="time-mark">6:52.88</span></td><td><span class="pts">415</span></td><td><span class="delta same">—</span></td></tr>
-      </tbody></table></div>
+
+    <!-- ========== PROMESA ========== -->
+    <div class="ranking-cat-panel" id="cat-promesa">
+      <div class="ranking-gender-tabs">
+        <button class="ranking-gender-tab active" onclick="switchGender(this,'promesa-masc')">♂ Masculino</button>
+        <button class="ranking-gender-tab" onclick="switchGender(this,'promesa-fem')">♀ Femenino</button>
+      </div>
+      <!-- Promesa Masculino -->
+      <div class="ranking-gender-panel active" id="promesa-masc">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">🌱</span><span class="ranking-mvp-label" style="color:var(--green)">Promesa Masculino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinador</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Diego Lara Cruz</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="pts">310</span></td><td><span class="delta up">↑ 5</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Álex Prieto Paz</div><div class="racer-club">Astur Speed Club</div></td><td>Astur Speed</td><td><span class="pts">294</span></td><td><span class="delta up">↑ 2</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Iker Serrano G.</div><div class="racer-club">Euskadi Patín</div></td><td>Euskadi P.</td><td><span class="pts">281</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Hugo Navarro F.</div><div class="racer-club">Valencia Speed</div></td><td>Valencia S.</td><td><span class="pts">265</span></td><td><span class="delta down">↓ 1</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Mateo Rivas Peña</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="pts">251</span></td><td><span class="delta up">↑ 1</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- Promesa Femenino -->
+      <div class="ranking-gender-panel" id="promesa-fem">
+        <div class="ranking-mvp-header"><span class="ranking-mvp-crown">🌱</span><span class="ranking-mvp-label" style="color:var(--green)">Promesa Femenino · Top 5</span><span class="ranking-mvp-desc">Temporada 2026</span></div>
+        <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinadora</th><th>Club</th><th>Puntos MVP</th><th>±</th></tr></thead><tbody>
+          <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Vera Molina Cano</div><div class="racer-club">Sevilla Rollers</div></td><td>Sevilla R.</td><td><span class="pts">305</span></td><td><span class="delta up">↑ 3</span></td></tr>
+          <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Sofía Castro Reyes</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="pts">289</span></td><td><span class="delta up">↑ 1</span></td></tr>
+          <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇪🇸 Emma Fuentes Val</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="pts">274</span></td><td><span class="delta same">—</span></td></tr>
+          <tr><td><span class="pos-num">4</span></td><td><div class="racer-name">🇪🇸 Leire Aguirre O.</div><div class="racer-club">Euskadi Patín</div></td><td>Euskadi P.</td><td><span class="pts">258</span></td><td><span class="delta down">↓ 2</span></td></tr>
+          <tr><td><span class="pos-num">5</span></td><td><div class="racer-name">🇪🇸 Paula Herrero V.</div><div class="racer-club">Zaragoza Inline</div></td><td>Zgz Inline</td><td><span class="pts">243</span></td><td><span class="delta up">↑ 2</span></td></tr>
+        </tbody></table></div>
+      </div>
     </div>
-    <div class="ranking-panel" id="tab-fem">
-      <div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Patinadora</th><th>Club</th><th>Tiempo 500m</th><th>Puntos</th><th>±</th></tr></thead><tbody>
-        <tr><td><span class="pos-num top1">1</span></td><td><div class="racer-name">🇪🇸 Lucía Martín Fdez.</div><div class="racer-club">Gijón Patín Club</div></td><td>Gijón PC</td><td><span class="time-mark record">36.88</span></td><td><span class="pts">420</span></td><td><span class="delta up">↑ 3</span></td></tr>
-        <tr><td><span class="pos-num top2">2</span></td><td><div class="racer-name">🇪🇸 Ana Romero Vega</div><div class="racer-club">Madrid Patin Race</div></td><td>Madrid PR</td><td><span class="time-mark">37.14</span></td><td><span class="pts">405</span></td><td><span class="delta same">—</span></td></tr>
-        <tr><td><span class="pos-num top3">3</span></td><td><div class="racer-name">🇨🇴 Valentina Ríos C.</div><div class="racer-club">Barcelona Inline</div></td><td>BCN Inline</td><td><span class="time-mark">37.41</span></td><td><span class="pts">388</span></td><td><span class="delta up">↑ 2</span></td></tr>
-      </tbody></table></div>
-    </div>
+
   </div>
 </div>
 
@@ -1611,7 +1695,27 @@ function switchTab(btn,panelId){
   document.querySelectorAll('.ranking-tab').forEach(function(t){t.classList.remove('active');});
   document.querySelectorAll('.ranking-panel').forEach(function(p){p.classList.remove('active');});
   btn.classList.add('active');
-  document.getElementById(panelId).classList.add('active');
+  var el=document.getElementById(panelId);if(el)el.classList.add('active');
+}
+
+function switchCat(btn,catId){
+  // Category buttons
+  document.querySelectorAll('.ranking-cat-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.ranking-cat-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  var panel=document.getElementById(catId);
+  if(panel) panel.classList.add('active');
+}
+
+function switchGender(btn,panelId){
+  // Find sibling gender tabs and panels within same category panel
+  var parent=btn.closest('.ranking-cat-panel');
+  if(!parent) return;
+  parent.querySelectorAll('.ranking-gender-tab').forEach(function(b){b.classList.remove('active');});
+  parent.querySelectorAll('.ranking-gender-panel').forEach(function(p){p.classList.remove('active');});
+  btn.classList.add('active');
+  var panel=document.getElementById(panelId);
+  if(panel) panel.classList.add('active');
 }
 
 function showNewsletter(){
